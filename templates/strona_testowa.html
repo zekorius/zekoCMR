@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>Siemano</h1>
+            <p>Jesteś na stronie testowej</p>
+            <p>uwaga test</p>
+
+            <div class="panel panel-default">
+            <!-- Table -->
+            <table class="table table-striped">
+                <caption>Lista firm.</caption>
+                <thead>
+                    <tr>
+                        <th>Nazwa firmy</th>
+                        <th>NIP</th>
+                        <th>Akcja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for company in companies %}
+                    <tr>
+                        <td>{{ company }}</td>
+                        <td>{{ company.nip }}</td>
+                        <td><a href="#">edytuj</a> / <a href="#">usuń</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <p>koniec testu</p>
+            <p><a class="btn btn-primary" href="/home">home</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

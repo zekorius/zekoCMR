@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% if form.errors %}
+
+<p>Podane hasło i login nie zgadzają się!.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+
+<p>Ten użytkownik nie ma dostępu do tej strony. Aby kontynuować,
+    zaloguj się do konta z dostępem.</p>
+    {% else %}
+
+<p>Zaloguj się by zobaczyć tę stronę.</p>
+    {% endif %}
+{% endif %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Zaloguj się</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+
+                        <p class="bs-component">
+                            <table>
+                                <tr>
+                                    <td>{{ form.username.label_tag }}</td>
+                                    <td>{{ form.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td><br></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ form.password.label_tag }}</td>
+                                    <td>{{ form.password }}</td>
+                                </tr>
+                            </table>
+                        </p>
+                        <p class="bs-component">
+                            <center>
+                                <input class="btn btn-primary btn-sm" type="submit" value="login" />
+                            </center>
+                        </p>
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+
+<script>
+{% if not user.is_authenticated %}
+$("ul.nav.navbar-nav.navbar-right").css("display","none");
+{% endif %}
+</script>
+
+{% endblock %}
