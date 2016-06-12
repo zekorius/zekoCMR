@@ -3,18 +3,29 @@
 
 {% block content %}
     {% if form.errors %}
-
-<p>Podane hasło i login nie zgadzają się!.</p>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+    <p>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <strong>Uwaga!</strong> Podane hasło i login nie zgadzają się.
+    </p>
+    </div>
 {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
-
-<p>Ten użytkownik nie ma dostępu do tej strony. Aby kontynuować,
-    zaloguj się do konta z dostępem.</p>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+    <p>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      Ten użytkownik nie ma dostępu do tej strony. Aby kontynuować, zaloguj się do konta z dostępem.
+    </p>
+    </div>
     {% else %}
-
-<p>Zaloguj się by zobaczyć tę stronę.</p>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+    <p>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      Zaloguj się by zobaczyć tę stronę.
+    </p>
+    </div>
     {% endif %}
 {% endif %}
 
