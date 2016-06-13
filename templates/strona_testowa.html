@@ -47,10 +47,14 @@
                   </div>
                   <div class="modal-body">
                     Bardzo fajnie
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                    <button type="button" class="btn btn-primary">Zapisz</button>
+                    <form method="POST" class="post-form">{% csrf_token %}
+                       {{ formAdd.as_p }}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                    </form>
+
                   </div>
                 </div>
               </div>
@@ -80,13 +84,7 @@
               </div>
             </div>
 
-            <p>testujemy czwartą rzecz</p>
-                <form method="POST" class="post-form">{% csrf_token %}
-                    {{ formAdd.as_p }}
-                    <button type="submit" class="save btn btn-default">Zapisz</button>
-                </form>
-
-            <p>koniec testu</p>
+             <p>koniec testu</p>
             <p><a class="btn btn-primary" href="/home">home</a></p>
         </div>
     </div>
