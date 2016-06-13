@@ -31,6 +31,61 @@
                 </tbody>
             </table>
             </div>
+
+            <p>Testujemy drugą rzecz</p>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">
+              Dodaj Firmę
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Dodaj firmę</h4>
+                  </div>
+                  <div class="modal-body">
+                    Bardzo fajnie
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-primary">Zapisz</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p>Testujemy trzecią rzecz</p>
+             <!-- Button trigger modal -->
+            <a data-toggle="modal" data-target="#editCompanyModal">
+              edytuj
+            </a>
+            <!-- Modal -->
+            <div class="modal fade" id="editCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edytuj firmę</h4>
+                  </div>
+                  <div class="modal-body">
+                    testuje
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                    <button type="button" class="btn btn-primary">Zapisz</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p>testujemy czwartą rzecz</p>
+                <form method="POST" class="post-form">{% csrf_token %}
+                    {{ formAdd.as_p }}
+                    <button type="submit" class="save btn btn-default">Zapisz</button>
+                </form>
+
             <p>koniec testu</p>
             <p><a class="btn btn-primary" href="/home">home</a></p>
         </div>
