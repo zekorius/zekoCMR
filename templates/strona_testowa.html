@@ -8,7 +8,14 @@
             <h1>Siemano</h1>
             <p>Jesteś na stronie testowej</p>
             <p>uwaga test</p>
+            {% if validError %}
 
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                    <p>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole name jest wymagane.                    </p>
+                    </div>
+            {% endif %}
             <div class="panel panel-default">
             <!-- Table -->
             <table class="table table-striped">
