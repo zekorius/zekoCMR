@@ -8,71 +8,144 @@
             <h1>Siemano</h1>
             <p>Jesteś na stronie testowej</p>
             <p>uwaga test</p>
-            {% if validError %}
 
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                    <p>
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole name jest wymagane.
-                    </p>
-                    </div>
-            {% endif %}
-            <div class="panel panel-default">
-            <!-- Table -->
-            <table class="table table-striped">
-                <caption>Lista firm.</caption>
+                <table class="table table-striped">
+                <caption>Lista użytkowników</caption>
                 <thead>
                     <tr>
-                        <th>Nazwa firmy</th>
-                        <th>NIP</th>
-                        <th>Akcja</th>
+                        <th>nick</th>
+                        <th>email</th>
+                        <th>imie</th>
+                        <th>nazwisko</th>
+                        <th>akcja</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for company in companies %}
+                {% for i_user in users %}
                     <tr>
-                        <td>{{ company }}</td>
-                        <td>{{ company.nip }}</td>
-                            <td>
-                                <!-- EDITION OF COMPANIES -->
-                                <a data-toggle="modal" data-target="#editCompany{{ company.id }}Modal">
-                                  edytuj
-                                </a>
-                                <!-- Modal -->
-                                <div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
-                                        <form method="POST" class="post-form">{% csrf_token %}
-                                                <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
-                                                <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
-                                            <p><label for="id_name">Nazwa:</label>
-                                                <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" /></p>
-                                            <p><label for="id_nip">Nip:</label>
-                                                <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" /></p>
+                        <td>{{ i_user.username }}</td>
+                        <td>{{ i_user.email }}</td>
+                        <td>{{ i_user.first_name }}</td>
+                        <td>{{ i_user.last_name }}</td>
+                        <td>edytuj / usuń</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+            <p>dodawanie</p>
+            <!-- button you should click to add user -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+              Dodaj Użytkownika
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Dodaj użytkownika</h4>
+                  </div>
+                  <div class="modal-body">
+                    Pola hasło i nick są wymagane
+                    <form method="POST" class="post-form">{% csrf_token %}
+                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
+                        <p><label for="id_nick">Nick:</label>
+                            <input id="id_nick" type="CharField" name="nick" max_length="30" required /></p>
+                        <p><label for="id_password">Hasło:</label>
+                            <input id="id_password" type="CharField" name="password" max_length="30" required /></p>
+                        <p><label for="id_password_re">Potwierdz hasło:</label>
+                            <input id="id_password_re" type="CharField" name="password_re" max_length="30" required /></p>
+                        <p><label for="id_first_name">Imie:</label>
+                            <input id="id_first_name" type="CharField" name="first_name" max_length="30" /></p>
+                        <p><label for="id_last_name">Nazwisko:</label>
+                            <input id="id_last_name" type="CharField" name="last_name" max_length="30" /></p>
+                        <p><label for="id_email">Email:</label>
+                            <input id="id_email" type="EmailField" name="email" max_length="30" /></p>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+        <!-- end of button and it's modal -->
+            <p>testujemy usuwanie</p>
+                <table class="table table-striped">
+                <caption>Lista użytkowników</caption>
+                <thead>
+                    <tr>
+                        <th>nick</th>
+                        <th>email</th>
+                        <th>imie</th>
+                        <th>nazwisko</th>
+                        <th>akcja</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for i_user in users %}
+                    <tr>
+                        <td>{{ i_user.username }}</td>
+                        <td>{{ i_user.email }}</td>
+                        <td>{{ i_user.first_name }}</td>
+                        <td>{{ i_user.last_name }}</td>
+                        <td>
+
+                            <!-- user edition -->
+                           <a data-toggle="modal" data-target="#editUser{{ i_user.id }}Modal">
+                             edytuj
+                           </a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="editUser{{ i_user.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Edytuj użytkownika {{ i_user.username }}</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    Aby nie zmieniać hasłą, pozostaw pole hasło puste.
+                                    <form method="POST" class="post-form">{% csrf_token %}
+                                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
+                                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ i_user.id }} />
+                                        <p><label for="id_nick">Nick:</label>
+                                            <input id="id_nick" type="CharField" name="nick" max_length="30" required  value="{{ i_user.username }}" /></p>
+                                        <p><label for="id_password">Hasło:</label>
+                                            <input id="id_password" type="CharField" name="password" max_length="30" /></p>
+                                        <p><label for="id_password_re">Potwierdz hasło:</label>
+                                            <input id="id_password_re" type="CharField" name="password_re" max_length="30" /></p>
+                                        <p><label for="id_first_name">Imie:</label>
+                                            <input id="id_first_name" type="CharField" name="first_name" max_length="30" value="{{ i_user.first_name }}" /></p>
+                                        <p><label for="id_last_name">Nazwisko:</label>
+                                            <input id="id_last_name" type="CharField" name="last_name" max_length="30" value="{{ i_user.last_name }}" /></p>
+                                        <p><label for="id_email">Email:</label>
+                                            <input id="id_email" type="EmailField" name="email" max_length="30" value="{{ i_user.email }}" /></p>
+
                                       </div>
                                       <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                                            <button type="submit" class="btn btn-primary">Zapisz</button>
-                                        </form>
-                                      </div>
-                                    </div>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                                        <button type="submit" class="btn btn-primary">Zapisz</button>
+                                    </form>
+
                                   </div>
                                 </div>
-                            <!-- END OF EDITION -->
-                                /
+                              </div>
+                            </div>
+                            <!-- end of user edition -->
 
-                           <!-- DELETING COMPANIES -->
-                           <a data-toggle="modal" data-target="#deleteCompany{{ company.id }}Modal">
+                            /
+
+
+                            <!-- user deletion -->
+                           <a data-toggle="modal" data-target="#deleteUser{{ i_user.id }}Modal">
                              usuń
                            </a>
                            <!-- Modal -->
-                           <div class="modal fade" id="deleteCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                           <div class="modal fade" id="deleteUser{{ i_user.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                              <div class="modal-dialog" role="document">
                                <div class="modal-content">
                                  <div class="modal-header">
@@ -81,9 +154,9 @@
                                  </div>
                                  <form method="POST" class="post-form">{% csrf_token %}
                                      <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="del" />
-                                     <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ company.id }} />
+                                     <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ i_user.id }} />
                                      <div class="modal-body">
-                                       Czy napewno chcesz usunąć firmę "{{ company }}"&#63;
+                                       Czy napewno chcesz usunąć użytkownika "{{ i_user.username }}"&#63;
 
                                      </div>
                                      <div class="modal-footer">
@@ -95,86 +168,17 @@
                                </div>
                              </div>
                            </div>
-                           <!-- END OF DELETING COMPANIES -->
 
-
-                            </td>
+                            <!-- end of user deletion-->
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
             </div>
+            <p>koniec testu</p>
 
-            <p>Testujemy drugą rzecz</p>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">
-              Dodaj Firmę
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Dodaj firmę</h4>
-                  </div>
-                  <div class="modal-body">
-                    Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
-                    <form method="POST" class="post-form">{% csrf_token %}
-                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
-                        <p><label for="id_name">Nazwa:</label>
-                            <input id="id_name" type="CharField" name="name" max_length="70" /></p>
-                        <p><label for="id_nip">Nip:</label>
-                            <input id="id_nip" type="IntegerField" name="nip" /></p>
-                       {#  formAdd.as_p   #}
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
-                    </form>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <p>Testujemy trzecią rzecz</p>
-             <!-- Button trigger modal -->
-        {% for company in companies %}
-            <a data-toggle="modal" data-target="#editCompany{{ company.id }}Modal">
-              edytuj
-            </a>
-            <!-- Modal -->
-            <div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
-                  </div>
-                  <div class="modal-body">
-                    Bardzo fajnie
-                    <form method="POST" class="post-form">{% csrf_token %}
-                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
-                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
-                        <p><label for="id_name">Nazwa:</label>
-                            <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" /></p>
-                        <p><label for="id_nip">Nip:</label>
-                            <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" /></p>
-                       {#  formAdd.as_p   #}
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
-                    </form>
-                      </div>
-                </div>
-              </div>
-            </div>
-        {% endfor %}
-             <p>koniec testu</p>
-
-            <p><a class="btn btn-primary" href="/home">home</a></p>
+            <p><a class="btn btn-primary" href="/home">home</a> <a class="btn btn-primary" href="/test">reload</a></p>
         </div>
     </div>
 </div>

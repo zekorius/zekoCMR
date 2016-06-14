@@ -51,9 +51,9 @@
                                                 <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
                                                 <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
                                             <p><label for="id_name">Nazwa:</label>
-                                                <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" /></p>
+                                                <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required="true" /></p>
                                             <p><label for="id_nip">Nip:</label>
-                                                <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" /></p>
+                                                <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required="true" /></p>
                                       </div>
                                       <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
