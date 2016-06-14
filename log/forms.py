@@ -14,5 +14,3 @@ class CompanyForm(forms.ModelForm):
         model = Companies
         fields = ('name', 'nip',)
 
-
-
