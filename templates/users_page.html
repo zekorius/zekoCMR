@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="jumbotron">
-            <h1>Siemano</h1>
+            <h3>Jesteś na stronie zarządzania użytkownikami</h3>
 
             <!-- table with users -->
             <table class="table table-striped">
@@ -108,11 +108,47 @@
                 {% endfor %}
                 </tbody>
             </table>
-            </div>
             <!-- end of table with users -->
+            <!-- button you should click to add user -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+                  Dodaj Użytkownika
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Dodaj użytkownika</h4>
+                      </div>
+                      <div class="modal-body">
+                        Pola hasło i nick są wymagane
+                        <form method="POST" class="post-form">{% csrf_token %}
+                                <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
+                            <p><label for="id_nick">Nick:</label>
+                                <input id="id_nick" type="CharField" name="nick" max_length="30" required /></p>
+                            <p><label for="id_password">Hasło:</label>
+                                <input id="id_password" type="CharField" name="password" max_length="30" required /></p>
+                            <p><label for="id_password_re">Potwierdz hasło:</label>
+                                <input id="id_password_re" type="CharField" name="password_re" max_length="30" required /></p>
+                            <p><label for="id_first_name">Imie:</label>
+                                <input id="id_first_name" type="CharField" name="first_name" max_length="30" /></p>
+                            <p><label for="id_last_name">Nazwisko:</label>
+                                <input id="id_last_name" type="CharField" name="last_name" max_length="30" /></p>
+                            <p><label for="id_email">Email:</label>
+                                <input id="id_email" type="EmailField" name="email" max_length="30" /></p>
 
-            <p>Jesteś na stronie zarządzania userami</p>
-            <p><a class="btn btn-primary" href="/home">home</a></p>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                            <button type="submit" class="btn btn-primary">Zapisz</button>
+                        </form>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <!-- end of button and it's modal -->
         </div>
     </div>
 </div>
