@@ -8,8 +8,11 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(label="Hasło", max_length=30,
                                widget=forms.PasswordInput(attrs={'class': 'form-control', 'name': 'password'}))
 
-class AddCompany(forms.ModelForm):
+class CompanyForm(forms.ModelForm):
 
     class Meta:
         model = Companies
         fields = ('name', 'nip',)
+
+
+
