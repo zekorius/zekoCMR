@@ -45,7 +45,7 @@ def companies_page(request):
 
 @login_required(login_url='login/')
 def users_page(request):
-    password_match = False
+    password_not_match = True
     users = User.objects.all().order_by('username')
     #post addition
     if request.method == "POST" and request.POST.get('option')=='add':
@@ -53,8 +53,8 @@ def users_page(request):
         password = request.POST.get('password')
         password_re = request.POST.get('password_re')
         if password==password_re:
-            password_match = True
-        if password_match:
+            password_not_match = False
+        if not password_not_match:
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
@@ -69,15 +69,15 @@ def users_page(request):
             user.save()
             return redirect('users_page')
         else:
-            return render(request,'users_page.html', {'users': users, 'password_match': password_match})
+            return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match})
     #post edition
     if request.method == "POST" and request.POST.get('option') == 'edit':
         nick = request.POST.get('nick')
         password = request.POST.get('password')
         password_re = request.POST.get('password_re')
         if password == password_re:
-            password_match = True
-        if password_match:
+            password_not_match = False
+        if not password_not_match:
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
@@ -96,7 +96,7 @@ def users_page(request):
             userToEdit.save()
             return redirect('users_page')
         else:
-            return render(request, 'users_page.html', {'users': users, 'password_match': password_match})
+            return render(request, 'users_page.html', {'users': users, 'password_not_match': password_not_match})
     #post deletion
     elif request.method == "POST" and request.POST.get('option')=='del':
         id_del = request.POST.get('id_del')
@@ -108,15 +108,15 @@ def users_page(request):
 
 @login_required(login_url='login/')
 def strona_testowa(request):
-    password_match = False
+    password_not_match = False
     users = User.objects.all().order_by('username')
     if request.method == "POST" and request.POST.get('option')=='add':
         nick = request.POST.get('nick')
         password = request.POST.get('password')
         password_re = request.POST.get('password_re')
         if password==password_re:
-            password_match = True
-        if password_match:
+            password_not_match = True
+        if password_not_match:
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
@@ -131,15 +131,15 @@ def strona_testowa(request):
             user.save()
             return redirect('strona_testowa')
         else:
-            return render(request,'strona_testowa.html', {'users': users, 'password_match': password_match})
+            return render(request,'strona_testowa.html', {'users': users, 'password_not_match': password_not_match})
     #edycja posta
     if request.method == "POST" and request.POST.get('option') == 'edit':
         nick = request.POST.get('nick')
         password = request.POST.get('password')
         password_re = request.POST.get('password_re')
         if password == password_re:
-            password_match = True
-        if password_match:
+            password_not_match = True
+        if password_not_match:
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             email = request.POST.get('email')
@@ -158,7 +158,7 @@ def strona_testowa(request):
             userToEdit.save()
             return redirect('strona_testowa')
         else:
-            return render(request, 'strona_testowa.html', {'users': users, 'password_match': password_match})
+            return render(request, 'strona_testowa.html', {'users': users, 'password_not_match': password_not_match})
     #usuwanie
     elif request.method == "POST" and request.POST.get('option')=='del':
         id_del = request.POST.get('id_del')
