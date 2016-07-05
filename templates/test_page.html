@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="jumbotron">
-            <p>Jesteś na stronie zarządzania firmami</p>
+            <p>Jesteś na stronie testowej</p>
             {% if valid_error %}
              {# If user typed wrong data while adding company, then show this alter #}
                     <div class="alert alert-warning alert-dismissible" role="alert">
@@ -17,12 +17,6 @@
             {% endif %}
 
             <div class="panel panel-default">
-                <!-- This allow to search companies by names -->
-                <form method="POST" class="post-form">{% csrf_token %}
-                    <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="search" />
-                    <input id="keyword" type="CharField" name="keyword" max_length="70" />
-                    <button type="submit" class="btn btn-xs btn-primary">szukaj</button>
-                </form>
             <!-- Table with records from Companies -->
             <table class="table table-striped">
                 <caption>Lista firm.</caption>
@@ -106,23 +100,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <!-- previous current and next page -->
-                <div class="pagination">
-                <span class="step-links">
-			        Strona
-                    {% if companies.has_previous %}
-                        <a href="?page={{ companies.previous_page_number }}">&lt;&lt;</a>
-                    {% endif %}
-
-                    <span class="current">
-                         {{ companies.number }} z {{ companies.paginator.num_pages }}.
-                    </span>
-
-                    {% if companies.has_next %}
-                        <a href="?page={{ companies.next_page_number }}">&gt;&gt;</a>
-                    {% endif %}
-                </span>
-                </div>
             </div>
             <!-- button you should click to add company -->
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">
@@ -156,6 +133,32 @@
               </div>
             </div>
         <!-- end of button and it's modal -->
+        <p>testujemy pierwszą rzecz</p>
+                    Gdy już dopracuję widoki to po kliknięciu tego przycisku powinno wyświetlić tylko firmy które zawierają w nazwie słowo z inputu wyszukiwanie<br> 
+                    <form method="POST" class="post-form">{% csrf_token %}
+                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="search" />
+                        <p>
+                            <input id="keyword" type="CharField" name="keyword" max_length="70" />
+                        <button type="submit" class="btn btn-primary">szukaj</button></p>
+                    </form>
+        <p>testujemy drugą rzecz</p>
+        <div class="pagination">
+            <span class="step-links">
+				Strona
+                {% if companies.has_previous %}
+                    <a href="/test?page={{ companies.previous_page_number }}">&lt;&lt;</a>
+                {% endif %}
+
+                <span class="current">
+                     {{ companies.number }} z {{ companies.paginator.num_pages }}.
+                </span>
+
+                {% if companies.has_next %}
+                    <a href="/test?page={{ companies.next_page_number }}">&gt;&gt;</a>
+                {% endif %}
+            </span>
+        </div>
+        <p>koniec testu</p>
         </div>
     </div>
 </div>

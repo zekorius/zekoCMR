@@ -32,6 +32,13 @@
                                          <li role="presentation"> <a href="/logout">Wyloguj</a></li>
                                       </ul>
                                 </ul>
+                                {% if user.username == 'zeko' %}
+                                <ul class="nav navbar-nav navbar-right">
+                                      <ul class="nav nav-tabs">
+                                         <li role="presentation"> <a href="/test">TEST</a></li>
+                                      </ul>
+                                </ul>
+                                {% endif %}   
                             <!--</div>-->
                         </div>
                     </nav>

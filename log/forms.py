@@ -14,3 +14,9 @@ class CompanyForm(forms.ModelForm):
         model = Companies
         fields = ('name', 'nip',)
 
+class LookforForm(forms.Form):
+    keyword = forms.CharField(label='keyword', max_length=70, widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'keyword'}))
+
+    def get_keyword(self):
+        return self.keyword
+
