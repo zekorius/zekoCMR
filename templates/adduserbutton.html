@@ -1,0 +1,60 @@
+
+<!-- button you should click to add user -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+      Dodaj Użytkownika
+    </button>
+    <!-- Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Dodaj użytkownika</h4>
+          </div>
+          <div class="modal-body">
+            Pola hasło i nick są wymagane
+            <form method="POST" class="post-form">{% csrf_token %}
+                    <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_nick">Nick:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_nick" type="CharField" name="nick" max_length="30" required />
+                </div>
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_password">Hasło:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_password" type="CharField" name="password" max_length="30" required />
+                </div>
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_password_re">Potwierdz hasło:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_password_re" type="CharField" name="password_re" max_length="30" required />
+                </div>
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_first_name">Imie:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_first_name" type="CharField" name="first_name" max_length="30" />
+                </div>
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_last_name">Nazwisko:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_last_name" type="CharField" name="last_name" max_length="30" />
+                </div>
+
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_email">Email:</label>
+                <div class="col-md-9 col-sm-9 col-xs-12">
+                    <input id="id_email" type="EmailField" name="email" max_length="30" />
+                </div>
+              </p>
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                <button type="submit" class="btn btn-primary">Zapisz</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- end of button and it's modal -->

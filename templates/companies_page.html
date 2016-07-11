@@ -1,35 +1,39 @@
 {% extends 'base.html' %}
 
+
+{% block page-title %}
+<h3>Firmy</h3>
+{% endblock %}
+
+
+{% block x_title %}
+<h2>Strona zarządzania firmami</h2>
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container">
     <div class="row">
         <div class="jumbotron">
-            <p>Jesteś na stronie zarządzania firmami</p>
             {% if valid_error %}
              {# If user typed wrong data while adding company, then show this alter #}
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                    <p>
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole nazwa jest wymagane.
-                    </p>
-                    </div>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                <p>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole nazwa jest wymagane.
+                </p>
+                </div>
             {% endif %}
 
             <div class="panel panel-default">
-                <!-- This allow to search companies by names -->
-                <form method="POST" class="post-form">{% csrf_token %}
-                    <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="search" />
-                    <input id="keyword" type="CharField" name="keyword" max_length="70" />
-                    <button type="submit" class="btn btn-xs btn-primary">szukaj</button>
-                </form>
             <!-- Table with records from Companies -->
             <table class="table table-striped">
                 <caption>Lista firm.</caption>
                 <thead>
                     <tr>
-                        <th>Nazwa firmy</th>
-                        <th>NIP</th>
+                        <th><a href="/companies?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
+                        <th><a href="/companies?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
                         <th>Akcja</th>
                     </tr>
                 </thead>
@@ -54,12 +58,16 @@
                                       <div class="modal-body">
                                         Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
                                         <form method="POST" class="post-form">{% csrf_token %}
-                                                <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
-                                                <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
-                                            <p><label for="id_name">Nazwa:</label>
-                                                <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required /></p>
-                                            <p><label for="id_nip">Nip:</label>
-                                                <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required /></p>
+                                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
+                                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_name">Nazwa:</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required />
+                                            </div>
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Nip:</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required />
+                                            </div>
                                       </div>
                                       <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
@@ -106,56 +114,50 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <!-- This allow to search companies by names -->
+            <div class="title_right">
+                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                  <form method="GET" class="input-group">
+                        <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="Szukaj firmy...">
+                        <span class="input-group-btn">
+                          <button type="submit" class="btn btn-primary" type="button">szukaj!</button>
+                        </span>
+                      </form>
+                </div>
+            </div>
             <!-- previous current and next page -->
                 <div class="pagination">
                 <span class="step-links">
-			        Strona
-                    {% if companies.has_previous %}
-                        <a href="?page={{ companies.previous_page_number }}">&lt;&lt;</a>
-                    {% endif %}
+                  <ul class="pagination pagination-sm">
+                     {% if companies.has_previous %}
+                            <li class="paginate_button previous">
+                               <a href="/companies?page={{ companies.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
+                            </li>
+                     {% else %}
+                           <li class="paginate_button previous disabled">
+                              <a href="#">Poprzednia</a>
+                           </li>
+                     {% endif %}
 
-                    <span class="current">
-                         {{ companies.number }} z {{ companies.paginator.num_pages }}.
-                    </span>
+                     {% for page in companies.paginator.page_range %}
+                            <li class="{% if companies.number == page  %}active{% endif %}"><a href="/companies?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
+                     {% endfor %}
 
-                    {% if companies.has_next %}
-                        <a href="?page={{ companies.next_page_number }}">&gt;&gt;</a>
-                    {% endif %}
-                </span>
+                     {% if companies.has_next %}
+                         <li class="paginate_button next">
+                             <a href="/companies?page={{ companies.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
+                         </li>
+                     {% else %}
+                     <li class="paginate_button next disabled">
+                         <a href="#">Następna</a>
+                     </li>
+                     {% endif %}
+                  </ul>
+                 </span>
                 </div>
             </div>
-            <!-- button you should click to add company -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCompanyModal">
-              Dodaj Firmę
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="addCompanyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Dodaj firmę</h4>
-                  </div>
-                  <div class="modal-body">
-                    Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
-                    <form method="POST" class="post-form">{% csrf_token %}
-                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
-                        <p><label for="id_name">Nazwa:</label>
-                            <input id="id_name" type="CharField" name="name" max_length="70" required /></p>
-                        <p><label for="id_nip">Nip:</label>
-                            <input id="id_nip" type="IntegerField" name="nip" required /></p>
-                       {#  formAdd.as_p   #}
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                        <button type="submit" class="btn btn-primary">Zapisz</button>
-                    </form>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-        <!-- end of button and it's modal -->
+          <!-- add companny button -->
+          {% include 'addcompanybutton.html' %}
         </div>
     </div>
 </div>
