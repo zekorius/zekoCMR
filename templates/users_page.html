@@ -13,7 +13,6 @@
 
 <div class="container">
     <div class="row">
-        <div class="panel panel-default">
         <!-- Table with records from users -->
         <div class="jumbotron">
             {% if password_not_match %}
@@ -109,9 +108,11 @@
                 </tbody>
             </table>
             </div><!-- end of panel's body -->
+            <div class panel-footer>
+              {% include 'pagination_users.html' %}
+            </div>
           </div><!-- end of panel-->
-            <!-- end of table with users -->
-        </div>
+        </div><!-- end of table with users -->
     </div>
 </div>
 {% endblock %}
