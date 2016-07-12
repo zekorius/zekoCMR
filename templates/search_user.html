@@ -1,13 +1,11 @@
 <!-- This allow to search users by names -->
 <div class="title_right">
-    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right">
-        <div class="input-group">
-            <form method="GET" class="post-form">
-                <span class="input-group-btn">
-                  <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="{% if search_phrase %}{{ search_phrase }}{% else %}Szukaj użytkownika...{% endif %}">
-                    <button type="submit" class="btn btn-primary" type="button">szukaj <span class="glyphicon glyphicon-search"></span></button>
-                  </span>
-            </form>
-        </div>
-    </div>
+  <div class="input-group">
+      <form method="GET" class="post-form">
+          <span class="input-group-btn">
+            <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="{% if search_phrase %}{{ search_phrase }}{% else %}Szukaj użytkownika...{% endif %}">
+              <button type="submit" class="btn btn-primary" type="button">szukaj <span class="glyphicon glyphicon-search"></span></button>
+            </span>
+      </form>
+  </div>
 </div>

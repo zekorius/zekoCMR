@@ -28,14 +28,16 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                       <br><br>{% include 'adduserbutton.html' %}
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
+                      {% include 'pagination_users.html' %}
+                    </div>
+                    <div class="col-sm-4">
                       <br><br>{% include 'search_user.html' %}
                     </div>
                 </div>
-                {% include 'pagination_users.html' %}
               </div><!-- end of panel heading -->
 
             <div class="panel-body">
@@ -61,7 +63,7 @@
                         <td>
 
                             <!-- user edition -->
-                           <a data-toggle="modal" data-target="#editUser{{ i_user.id }}Modal">
+                           <a data-toggle="modal" href="#" data-target="#editUser{{ i_user.id }}Modal">
                              edytuj
                            </a>
                            <!-- Modal user edition -->
@@ -72,7 +74,7 @@
 
 
                             <!-- user deletion -->
-                           <a data-toggle="modal" data-target="#deleteUser{{ i_user.id }}Modal">
+                           <a data-toggle="modal" href="#" data-target="#deleteUser{{ i_user.id }}Modal">
                              usuń
                            </a>
                            <!-- Modal -->

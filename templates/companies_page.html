@@ -58,7 +58,7 @@
                         <td>{{ company.nip }}</td>
                         <td>
                             <!-- EDITION OF COMPANIES -->
-                                <a data-toggle="modal" data-target="#editCompany{{ company.id }}Modal">
+                                <a data-toggle="modal" href="#" data-target="#editCompany{{ company.id }}Modal">
                                   edytuj
                                 </a>
                                 <!-- Modal -->
@@ -95,7 +95,7 @@
                                 /
 
                            <!-- DELETING COMPANIES -->
-                           <a data-toggle="modal" data-target="#deleteCompany{{ company.id }}Modal">
+                           <a data-toggle="modal" href="#" data-target="#deleteCompany{{ company.id }}Modal">
                              usuń
                            </a>
                            <!-- Modal -->
@@ -130,17 +130,6 @@
             </table>
           </div><!--end of panel body-->
         </div><!--end of panel-->
-            <!-- This allow to search companies by names -->
-            <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                  <form method="GET" class="input-group">
-                        <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="Szukaj firmy...">
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn btn-primary" type="button">szukaj!</button>
-                        </span>
-                      </form>
-                </div>
-            </div>
         </div><!-- end of joombortron -->
     </div> <!-- end of row -->
 </div><!-- end of contrainer -->
