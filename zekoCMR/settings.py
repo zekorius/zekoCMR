@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'log',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -64,10 +65,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'zekoCMR.wsgi.application'
 

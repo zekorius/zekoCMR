@@ -1,66 +1,103 @@
 {% extends 'base.html' %}
 
+
 {% block page-title %}
-<h3>TEST</h3>
+<h3>Firmy</h3>
 {% endblock %}
 
 
 {% block x_title %}
-<h2>Strona do testów</h2>
+<h2>Strona zarządzania firmami</h2>
 {% endblock %}
+
 
 {% block content %}
 
 <div class="container">
     <div class="row">
-        <div class="panel panel-default">
-        <!-- Table with records from users -->
         <div class="jumbotron">
-            {% if password_not_match %}
+            {% if valid_error %}
              {# If user typed wrong data while adding company, then show this alter #}
-                    <div class="alert alert-warning alert-dismissible" role="alert">
-                    <p>
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        Podane hasła nie są jednakowe!
-                    </p>
-                    </div>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                <p>
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole nazwa jest wymagane.
+                </p>
+                </div>
             {% endif %}
+
             <div class="panel panel-default">
-            <!-- table with users -->
+            <div class="panel-heading">
+              <div class="row">
+                  <div class="col-sm-4">
+                    <br><br>{% include 'addcompanybutton.html' %}
+                  </div>
+                  <div class="col-sm-8">
+                    <br><br>{% include 'search_company.html' %}
+                  </div>
+              </div>
+              {% include 'pagination_test.html' %}
+            </div><!-- end of panel heading -->
+            <!-- Table with records from Companies -->
+            <div class="panel-body">
             <table class="table table-striped">
-                <caption>Lista użytkowników</caption>
+                <caption>Lista firm.</caption>
                 <thead>
                     <tr>
-                        <th><a href="/test?order={% if sorted_by == 'un' %}-{% endif %}un{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">nick</a></th>
-                        <th><a href="/test?order={% if sorted_by == 'e' %}-{% endif %}e{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">email</a></th>
-                        <th><a href="/test?order={% if sorted_by == 'fn' %}-{% endif %}fn{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">imie</a></th>
-                        <th><a href="/test?order={% if sorted_by == 'ln' %}-{% endif %}ln{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">nazwisko</a></th>
-                        <th>akcja</th>
+                        <th><a href="/test?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
+                        <th><a href="/test?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
+                        <th>Akcja</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for i_user in users %}
+                {% for company in companies %}
                     <tr>
-                        <td>{{ i_user.username }}</td>
-                        <td>{{ i_user.email }}</td>
-                        <td>{{ i_user.first_name }}</td>
-                        <td>{{ i_user.last_name }}</td>
+                        <td>{{ company }}</td>
+                        <td>{{ company.nip }}</td>
                         <td>
+                            <!-- EDITION OF COMPANIES -->
+                                <a data-toggle="modal" data-target="#editCompany{{ company.id }}Modal">
+                                  edytuj
+                                </a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
+                                        <form method="POST" class="post-form">{% csrf_token %}
+                                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
+                                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_name">Nazwa:</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required />
+                                            </div>
+                                              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Nip:</label>
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                              <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required />
+                                            </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                                            <button type="submit" class="btn btn-primary">Zapisz</button>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            <!-- END OF EDITION -->
+                                /
 
-                            <!-- user edition -->
-                           <a data-toggle="modal" data-target="#editUser{{ i_user.id }}Modal">
-                             edytuj
-                           </a>
-                            <!-- Modal user edition -->
-                            {% include 'usermodaledition.html' %}
-                            <!-- end of user edition -->
-                            /
-                            <!-- user deletion -->
-                           <a data-toggle="modal" data-target="#deleteUser{{ i_user.id }}Modal">
+                           <!-- DELETING COMPANIES -->
+                           <a data-toggle="modal" data-target="#deleteCompany{{ company.id }}Modal">
                              usuń
                            </a>
                            <!-- Modal -->
-                           <div class="modal fade" id="deleteUser{{ i_user.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                           <div class="modal fade" id="deleteCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                              <div class="modal-dialog" role="document">
                                <div class="modal-content">
                                  <div class="modal-header">
@@ -69,9 +106,9 @@
                                  </div>
                                  <form method="POST" class="post-form">{% csrf_token %}
                                      <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="del" />
-                                     <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ i_user.id }} />
+                                     <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ company.id }} />
                                      <div class="modal-body">
-                                       Czy napewno chcesz usunąć użytkownika "{{ i_user.username }}"&#63;
+                                       Czy napewno chcesz usunąć firmę "{{ company }}"&#63;
 
                                      </div>
                                      <div class="modal-footer">
@@ -83,174 +120,14 @@
                                </div>
                              </div>
                            </div>
-
-                            <!-- end of user deletion-->
+                           <!-- END OF DELETING COMPANIES -->
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
-            </table>
-            <!-- This allow to search companies by names -->
-                <div class="title_right">
-                    <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                      <form method="GET" class="input-group">
-                        <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="Search for...">
-                        <span class="input-group-btn">
-                          <button type="submit" class="btn btn-primary" type="button">Go!</button>
-                        </span>
-                      </form>
-                    </div>
-                </div>
-            <!-- previous current and next page -->
-                <div class="pagination">
-                <span class="step-links">
-                Strona
-                    {% if users.has_previous %}
-                        {% if search_phrase %}
-                            <a href="/test?page={{ users.previous_page_number }}&search={{ search_phrase }}">&lt;&lt;</a>
-                        {% else %}
-                            <a href="/test?page={{ users.previous_page_number }}">&lt;&lt;</a>
-                        {% endif %}
-
-                    {% endif %}
-
-                    <span class="current">
-                         {{ users.number }} z {{ users.paginator.num_pages }}.
-                    </span>
-
-                    {% if users.has_next %}
-                        {% if search_phrase %}
-                            <a href="/test?page={{ users.next_page_number }}&search={{ search_phrase}}">&gt;&gt;</a>
-                        {% else %}
-                            <a href="/test?page={{ users.next_page_number }}">&gt;&gt;</a>
-                        {% endif %}
-                    {% endif %}
-                </span>
-                </div>
-            </div>
-            <!-- end of table with users -->
-            <!-- add user button -->
-            {% include 'adduserbutton.html' %}
-
-
-          <p>testy</p>
-            <div class="title_right">
-                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                        <form method="GET" class="input-group">
-                          <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="Search for...">
-                          <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button">Go!</button>
-                          </span>
-                        </form>
-                </div>
-            </div>
-          <p>testy2</p>
-          <!-- button you should click to add user -->
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
-                Dodaj Użytkownika
-              </button>
-              <!-- Modal -->
-              <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      <h4 class="modal-title" id="myModalLabel">Dodaj użytkownika</h4>
-                    </div>
-                    <div class="modal-body">
-                      Pola hasło i nick są wymagane
-                      <form method="POST" class="post-form">{% csrf_token %}
-                              <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_nick">Nick:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_nick" type="CharField" name="nick" max_length="30" required />
-                          </div>
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_password">Hasło:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_password" type="CharField" name="password" max_length="30" required />
-                          </div>
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_password_re">Potwierdz hasło:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_password_re" type="CharField" name="password_re" max_length="30" required />
-                          </div>
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_first_name">Imie:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_first_name" type="CharField" name="first_name" max_length="30" />
-                          </div>
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_last_name">Nazwisko:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_last_name" type="CharField" name="last_name" max_length="30" />
-                          </div>
-
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_email">Email:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="id_email" type="EmailField" name="email" max_length="30" />
-                          </div>
-                        </p>
-
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                          <button type="submit" class="btn btn-primary">Zapisz</button>
-                      </form>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-          <!-- ładna paginacja -->
-          <!-- previous current and next page -->
-              <div class="pagination">
-              <span class="step-links">
-                <ul class="pagination pagination-sm">
-                   {% if users.has_previous %}
-                          <li class="paginate_button previous">
-                             <a href="/test?page={{ users.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
-                          </li>
-                   {% else %}
-                         <li class="paginate_button previous disabled">
-                            <a href="#">Poprzednia</a>
-                         </li>
-                   {% endif %}
-
-                   {% for page in users.paginator.page_range %}
-                          <li class="{% if users.number == page  %}active{% endif %}"><a href="/test?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
-                   {% endfor %}
-
-                   {% if users.has_next %}
-                       <li class="paginate_button next">
-                           <a href="/test?page={{ users.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
-                       </li>
-                   {% else %}
-                   <li class="paginate_button next disabled">
-                       <a href="#">Następna</a>
-                   </li>
-                   {% endif %}
-                </ul>
-               </span>
-              </div>
-              <!-- and of paginate pages -->
-          <!-- end of button and it's modal -->
-          <p>NACIEKAWSZY TEST EVER</p>
-          Tak będzie, nie zmyślam<br>
-          <a href="/test?order=un{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Użytkownika</a><br>
-          <a href="/test?order=-un{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Odwrócone użytkownika</a><br>
-          <a href="/test?order=fn{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Imie</a><br>
-          <a href="/test?order=-fn{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Odwrócone Imie</a><br>
-          <a href="/test?order=e{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Email</a><br>
-          <a href="/test?order=-e{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Odwrócone Email</a><br>
-          <a href="/test?order=ln{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwisko</a><br>
-          <a href="/test?order=-ln{% if users %}&page={{ users.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">odwrócone nazwisko</a>
-
-          <p>może ciekawe</p>
-          Sortowany przez {{ sorted_by}}
-          <p>koniec testów</p>
+            </table>}
+          </div><!-- end of panel body -->
+        </div><!-- end of panel -->
         </div>
     </div>
 </div>

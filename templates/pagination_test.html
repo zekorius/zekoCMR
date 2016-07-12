@@ -1,0 +1,28 @@
+<!-- previous current and next page -->
+<div class="pagination">
+  <ul class="pagination pagination-sm">
+     {% if companies.has_previous %}
+         <li class="paginate_button previous">
+           <a href="/test?page={{ companies.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
+         </li>
+     {% else %}
+         <li class="paginate_button previous disabled">
+            <a href="#">Poprzednia</a>
+         </li>
+     {% endif %}
+
+     {% for page in companies.paginator.page_range %}
+         <li class="{% if companies.number == page  %}active{% endif %}"><a href="/test?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
+     {% endfor %}
+
+     {% if companies.has_next %}
+         <li class="paginate_button next">
+             <a href="/test?page={{ companies.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
+         </li>
+     {% else %}
+         <li class="paginate_button next disabled">
+             <a href="#">Następna</a>
+         </li>
+     {% endif %}
+  </ul>
+</div>

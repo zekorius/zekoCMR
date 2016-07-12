@@ -1,0 +1,11 @@
+<!-- This allow to search companies by names -->
+<div class="title_right">
+  <div class="form-group pull-right">
+      <form method="GET" class="input-group">
+            <input id="search" type="CharField" name="search" max_length="70" class="form-control" placeholder="{% if search_phrase %}{{ search_phrase }}{% else %} Szukaj firmy...{% endif %}">
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-primary" type="button">szukaj <span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </form>
+        </div>
+</div>

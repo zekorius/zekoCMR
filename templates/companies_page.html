@@ -27,6 +27,20 @@
             {% endif %}
 
             <div class="panel panel-default">
+              <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-2">
+                      <br><br>{% include 'addcompanybutton.html' %}
+                    </div>
+                    <div class="col-sm-6">
+                      {% include 'pagination_company.html' %}
+                    </div>
+                    <div class="col-sm-4">
+                      <br><br>{% include 'search_company.html' %}
+                    </div>
+                </div>
+              </div><!-- end of panel heading -->
+              <div class="panel panel-body">
             <!-- Table with records from Companies -->
             <table class="table table-striped">
                 <caption>Lista firm.</caption>
@@ -114,6 +128,8 @@
                 {% endfor %}
                 </tbody>
             </table>
+          </div><!--end of panel body-->
+        </div><!--end of panel-->
             <!-- This allow to search companies by names -->
             <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
@@ -125,40 +141,7 @@
                       </form>
                 </div>
             </div>
-            <!-- previous current and next page -->
-                <div class="pagination">
-                <span class="step-links">
-                  <ul class="pagination pagination-sm">
-                     {% if companies.has_previous %}
-                            <li class="paginate_button previous">
-                               <a href="/companies?page={{ companies.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
-                            </li>
-                     {% else %}
-                           <li class="paginate_button previous disabled">
-                              <a href="#">Poprzednia</a>
-                           </li>
-                     {% endif %}
-
-                     {% for page in companies.paginator.page_range %}
-                            <li class="{% if companies.number == page  %}active{% endif %}"><a href="/companies?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
-                     {% endfor %}
-
-                     {% if companies.has_next %}
-                         <li class="paginate_button next">
-                             <a href="/companies?page={{ companies.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
-                         </li>
-                     {% else %}
-                     <li class="paginate_button next disabled">
-                         <a href="#">Następna</a>
-                     </li>
-                     {% endif %}
-                  </ul>
-                 </span>
-                </div>
-            </div>
-          <!-- add companny button -->
-          {% include 'addcompanybutton.html' %}
-        </div>
-    </div>
-</div>
+        </div><!-- end of joombortron -->
+    </div> <!-- end of row -->
+</div><!-- end of contrainer -->
 {% endblock %}
