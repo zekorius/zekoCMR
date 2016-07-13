@@ -63,18 +63,15 @@
 
                             <!-- user edition -->
                            <a data-toggle="modal" href="#" data-target="#editUser{{ i_user.id }}Modal">
-                             edytuj
+                             <i class="fa fa-pencil"></i> edytuj
                            </a>
                            <!-- Modal user edition -->
                            {% include 'usermodaledition.html' %}
                             <!-- end of user edition -->
-
                             /
-
-
                             <!-- user deletion -->
                            <a data-toggle="modal" href="#" data-target="#deleteUser{{ i_user.id }}Modal">
-                             usuń
+                             <i class="fa fa-trash"></i> usuń
                            </a>
                            <!-- Modal -->
                            <div class="modal fade" id="deleteUser{{ i_user.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

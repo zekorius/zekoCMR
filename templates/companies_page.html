@@ -47,56 +47,34 @@
                 <thead>
                     <tr>
                         <th><a href="/companies?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
+                        <th><a href="/companies?order={% if sorted_by == 'ph' %}-{% endif %}ph{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Telefon</a></th>
                         <th><a href="/companies?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
+                        <th><a href="/companies?order={% if sorted_by == 'st' %}-{% endif %}st{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Adres</a></th>
+                        <th><a href="/companies?order={% if sorted_by == 'ct' %}-{% endif %}ct{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Miasto</a></th>
                         <th>Akcja</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for company in companies %}
                     <tr>
-                        <td>{{ company }}</td>
+                        <td><a href="{% url 'company_details' id=company.id %}">{{ company }}</a></td>
+                        <td>{{ company.phone }}</td>
                         <td>{{ company.nip }}</td>
+                        <td>{{ company.st_address }}</td>
+                        <td>{{ company.city }}</td>
                         <td>
                             <!-- EDITION OF COMPANIES -->
                                 <a data-toggle="modal" href="#" data-target="#editCompany{{ company.id }}Modal">
-                                  edytuj
+                                  <i class="fa fa-pencil"></i> edytuj
                                 </a>
                                 <!-- Modal -->
-                                <div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
-                                        <form method="POST" class="post-form">{% csrf_token %}
-                                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
-                                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_name">Nazwa:</label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required />
-                                            </div>
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Nip:</label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required />
-                                            </div>
-                                      </div>
-                                      <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                                            <button type="submit" class="btn btn-primary">Zapisz</button>
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+                              {% include 'companymodaledition.html' %}
                             <!-- END OF EDITION -->
                                 /
 
                            <!-- DELETING COMPANIES -->
                            <a data-toggle="modal" href="#" data-target="#deleteCompany{{ company.id }}Modal">
-                             usuń
+                             <i class="fa fa-trash"></i> usuń
                            </a>
                            <!-- Modal -->
                            <div class="modal fade" id="deleteCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -114,7 +92,6 @@
 
                                      </div>
                                      <div class="modal-footer">
-
                                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
                                        <button type="submit" class="btn btn-primary">Usuń</button>
                                      </div>

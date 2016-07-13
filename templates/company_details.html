@@ -1,0 +1,41 @@
+{% extends 'base-test.html' %}
+
+{% block page-title %}
+<h3>zekoCMR</h3>
+{% endblock %}
+
+
+{% block x_title %}
+<h2>Zarządzanie firmą:&#34;{{ company }}&#34;</h2>
+<br><br><a href="/companies">Powrót do Firm</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+            <div class="panel panel-default">
+              <div class="panel-title">Firma: &#34;{{ company }}&#34;</div>
+              <div class="panel-body">
+                  {{ company.phone }} telefon<br>
+                  {{ company.nip }} nip<br>
+                  {{ company.st_address }} adres<br>
+                  {{ company.city }} miasto<br>
+              </div>
+            </div>
+            <p>Komentarze:</p>
+            {% include 'add_comment_button.html' %}
+            <br>Dodane komentarze:
+            <div class="panel-group">
+            {% for comment in comments %}
+                <div class="panel panel-default">
+                  <div class="panel-body">{{ comment.text|safe }}</div>
+                  <div class="panel-footer"><a href="#"><i class="fa fa-pencil"></i> edytuj</a> / <a href="#"><i class="fa fa-trash"></i> usuń</a></div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

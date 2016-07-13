@@ -1,0 +1,28 @@
+<!-- button you should click to add comment -->
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCommentModal">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Dodaj komentarz
+</button>
+<!-- Modal -->
+<div class="modal fade" id="addCommentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Dodaj komentarz</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST" class="post-form" id="addCommentForm">{% csrf_token %}
+            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-primary" value="add" />Zapisz</button>
+        </form>
+        <br>
+        <textarea form="addCommentForm" name="text" rows="5" cols="35"></textarea>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of button and it's modal -->

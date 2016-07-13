@@ -128,6 +128,11 @@
             </table>}
           </div><!-- end of panel body -->
         </div><!-- end of panel -->
+        <p>potestujmy company</p>
+          {% for company in companies %}
+              <a href="{% url 'company_details' id=company.id %}">{{ company.id }}</a>
+          {% endfor %}
+        <p>koniec testu</p>
         </div>
     </div>
 </div>

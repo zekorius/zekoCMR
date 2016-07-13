@@ -1,0 +1,42 @@
+<!-- modal company edition -->
+<div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
+      </div>
+      <div class="modal-body">
+        Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
+        <form method="POST" class="post-form">{% csrf_token %}
+            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
+            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
+              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_name">Nazwa:</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required />
+            </div>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Telefon:</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input id="id_phone" type="IntegerField" name="phone" value="{{ company.phone }}" />
+            </div>
+            <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Nip:</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required />
+            </div>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Adres:</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input id="id_st_address" type="CharField" name="st_address" max_length="40" value="{{ company.st_address }}" />
+            </div>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Miasto:</label>
+            <div class="col-md-9 col-sm-9 col-xs-12">
+              <input id="id_city" type="CharField" name="city" max_length="30" value="{{ company.city }}" />
+            </div>
+      </div>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

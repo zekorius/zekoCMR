@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Companies
-from .forms import CompanyForm, LookforForm
+from .models import Companies, Comments
+from .forms import CompanyForm, LookforForm, CommentForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 # Create your views here.
 @login_required(login_url='login/')
@@ -16,7 +17,7 @@ def companies_page(request):
     page = request.GET.get('page')
     keyword = request.GET.get('search')
     sort_by = request.GET.get('order')
-    sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip'}
+    sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip', 'ph':'phone','-ph':'-phone', 'ct':'city', '-ct':'-city', 'st':'st_address', '-st':'-st_address'}
     if not sort_by in sort_dic:
         sort_by = 'cn'
     been_searched = False
@@ -40,8 +41,16 @@ def companies_page(request):
         companytoedit = Companies.objects.get(id=id_edit)
         formEdit = CompanyForm(request.POST)
         if formEdit.is_valid() and len(str(request.POST.get('nip'))) == 9:
-            companytoedit.name = request.POST.get('name')
-            companytoedit.nip = request.POST.get('nip')
+            if request.POST.get('name'):
+                companytoedit.name = request.POST.get('name')
+            if request.POST.get('phone'):
+                companytoedit.phone = request.POST.get('phone')
+            if request.POST.get('st_address'):
+                companytoedit.address = request.POST.get('st_address')
+            if request.POST.get('city'):
+                companytoedit.city = request.POST.get('city')
+            if request.POST.get('nip'):
+                companytoedit.nip = request.POST.get('nip')
             companytoedit.save()
             return redirect('companies_page')
         else:
@@ -145,12 +154,34 @@ def users_page(request):
     except EmptyPage:
         users = paginator.page(paginator.num_pages) # jeżeli strona poza zasięgiem pokaż ostatnią
     if been_searched and sort_by:
-        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'search_phrase': keyword, 'sorted_by': sort_by})
+        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'search_phrase': keyword, 'sorted_by': sort_by,})
     elif been_searched:
-        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'search_phrase': keyword})
+        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'search_phrase': keyword,})
     elif sort_by:
-        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'sorted_by': sort_by})
-    return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'sorted_by': 'un'})
+        return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'sorted_by': sort_by,})
+    return render(request,'users_page.html', {'users': users, 'password_not_match': password_not_match, 'sorted_by': 'un',})
+
+@login_required(login_url='login/')
+def company_details(request, id):
+    comments = Comments.objects.filter(parent_id = id)
+    print('jestem tutaj!')
+    if request.POST.get('option') == 'add':
+        print('a tutaj już nie :/')
+        formAdd = CommentForm(request.POST)
+        if formAdd.is_valid():
+            new_comment = formAdd.save(commit=False)
+            new_comment.parent_id = Companies.objects.get(id = id)
+            new_comment.save()
+            formAdd.save()
+
+
+    try:
+        company = Companies.objects.get(id = id)#id od firmy =id
+    except ObjectDoesNotExist:
+        return render(request, '404_company.html')
+    except MultipleObjectsReturned:
+        company = Companies.objects.filter(id = id).latest('id')
+    return render(request,'company_details.html',{'comments': comments, 'company':company,})
 
 @login_required(login_url='login/')
 def test_page(request):
