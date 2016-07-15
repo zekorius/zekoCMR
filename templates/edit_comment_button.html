@@ -1,0 +1,23 @@
+<!-- Modal -->
+<div class="modal fade" id="editComment{{ comment.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edytuj {{ comment }}</h4>
+      </div>
+      <div class="modal-body">
+        <form action="." method="post">
+          {% csrf_token %}
+              <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ comment.id }} />
+              <p><label for="id_title">Title:</label> <input id="id_title" maxlength="80" name="title" value="{{ comment.title|safe }}" type="text"></p>
+              <p><label for="id_text">Text:</label> <textarea id="id_text" name="text" cols="18" rows="10">{{ comment.text|safe }}</textarea></p>
+              <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-primary" name="edit-comment" value="edit" />Zapisz</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of button and it's modal -->
