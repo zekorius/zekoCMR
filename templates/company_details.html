@@ -17,11 +17,23 @@
         <div class="jumbotron">
             <div class="panel panel-default">
               <div class="panel-title">Firma: &#34;{{ company }}&#34;</div>
+              <div class="panel-heading">
+                <a data-toggle="modal" href="#" data-target="#editCompany{{ company.id }}Modal">
+                  <i class="fa fa-pencil"></i> edytuj
+                </a>
+                {% include 'companymodaledition.html' %}
+                /
+                <!-- DELETING COMPANIES -->
+                <a data-toggle="modal" href="#" data-target="#deleteCompany{{ company.id }}Modal">
+                  <i class="fa fa-trash"></i> usuń
+                </a>
+              {% include 'delcompany.html' %}
+              </div>
               <div class="panel-body">
-                  {{ company.phone }} telefon<br>
-                  {{ company.nip }} nip<br>
-                  {{ company.st_address }} adres<br>
-                  {{ company.city }} miasto<br>
+                  Telefon: {{ company.phone }}<br>
+                  Nip: {{ company.nip }}<br>
+                  Adres: {{ company.st_address }}<br>
+                  Miasto: {{ company.city }}<br>
               </div>
             </div>
             <p>Komentarze:</p>
@@ -30,8 +42,12 @@
             <div class="panel-group">
             {% for comment in comments %}
                 <div class="panel panel-default">
+                  <div class="panel-title">{{ comment.title|safe }}</div>
+                  <div class="panel-heading">Utworzony {{ comment.created }} przez {{ comment.author }}</div>
                   <div class="panel-body">{{ comment.text|safe }}</div>
-                  <div class="panel-footer"><a href="#"><i class="fa fa-pencil"></i> edytuj</a> / <a href="#"><i class="fa fa-trash"></i> usuń</a></div>
+                  <div class="panel-footer"><a data-toggle="modal" href="#" data-target="#editComment{{ comment.id }}Modal"><i class="fa fa-pencil"></i> edytuj</a> / <a data-toggle="modal" href="#" data-target="#deleteComment{{ comment.id }}Modal"><i class="fa fa-trash"></i> usuń</a></div>
+                  {% include 'delcomment.html' %}
+                  {% include 'edit_comment_button.html' %}
                 </div>
             {% endfor %}
             </div>

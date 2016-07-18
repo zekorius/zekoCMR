@@ -11,15 +11,14 @@
         <h4 class="modal-title" id="myModalLabel">Dodaj komentarz</h4>
       </div>
       <div class="modal-body">
-        <form method="POST" class="post-form" id="addCommentForm">{% csrf_token %}
-            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add" />
-      </div>
-      <div class="modal-footer">
+        <form action="." method="post">
+            {% csrf_token %}
+            <p><label for="id_title">Title:</label> <input id="id_title" maxlength="80" name="title" value="{{ comment.title }}" type="text"></p>
+            <p><label for="id_text">Text:</label> <textarea id="id_text" name="text" cols="18" rows="10">{{ comment.text }}</textarea></p>
+            <input type="hidden" id="id_id_user" type="IntegerField" name="id_user" value={{ user.id }} />
             <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-            <button type="submit" class="btn btn-primary" value="add" />Zapisz</button>
+            <button type="submit" class="btn btn-primary" name="add-comment" value="add" />Zapisz</button>
         </form>
-        <br>
-        <textarea form="addCommentForm" name="text" rows="5" cols="35"></textarea>
 
       </div>
     </div>

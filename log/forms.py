@@ -18,7 +18,7 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comments
-        fields = ('text',)
+        fields = ('title','text')
 
 class LookforForm(forms.Form):
     keyword = forms.CharField(label='keyword', max_length=70, widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'keyword'}))

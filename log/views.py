@@ -17,7 +17,9 @@ def companies_page(request):
     page = request.GET.get('page')
     keyword = request.GET.get('search')
     sort_by = request.GET.get('order')
-    sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip', 'ph':'phone','-ph':'-phone', 'ct':'city', '-ct':'-city', 'st':'st_address', '-st':'-st_address'}
+    sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip',
+    'ph':'phone','-ph':'-phone', 'ct':'city', '-ct':'-city', 'st':'st_address',
+    '-st':'-st_address'}
     if not sort_by in sort_dic:
         sort_by = 'cn'
     been_searched = False
@@ -34,6 +36,8 @@ def companies_page(request):
     elif request.method == "POST" and request.POST.get('option')=='del':
         id_del = request.POST.get('id_del')
         companytodel = Companies.objects.get(id=id_del)
+        commentstodel = Comments.objects.filter(company = companytodel)
+        commentstodel.delete()
         companytodel.delete()
         return redirect('companies_page')
     elif request.method == "POST" and request.POST.get('option')=='edit':
@@ -46,7 +50,7 @@ def companies_page(request):
             if request.POST.get('phone'):
                 companytoedit.phone = request.POST.get('phone')
             if request.POST.get('st_address'):
-                companytoedit.address = request.POST.get('st_address')
+                companytoedit.st_address = request.POST.get('st_address')
             if request.POST.get('city'):
                 companytoedit.city = request.POST.get('city')
             if request.POST.get('nip'):
@@ -163,79 +167,63 @@ def users_page(request):
 
 @login_required(login_url='login/')
 def company_details(request, id):
-    comments = Comments.objects.filter(parent_id = id)
-    print('jestem tutaj!')
-    if request.POST.get('option') == 'add':
-        print('a tutaj już nie :/')
-        formAdd = CommentForm(request.POST)
-        if formAdd.is_valid():
-            new_comment = formAdd.save(commit=False)
-            new_comment.parent_id = Companies.objects.get(id = id)
+    comments = Comments.objects.filter(company = id)
+    formComment = CommentForm()
+    if request.method == "POST" and 'add-comment' in request.POST:
+        auth_id = (request.POST.get('id_user'))
+        formComment = CommentForm(request.POST)
+        if formComment.is_valid():
+            new_comment = formComment.save(commit=False)
+            new_comment.company = Companies.objects.get(id = id)
+            new_comment.author = User.objects.get(id = auth_id)
             new_comment.save()
-            formAdd.save()
-
-
+    if request.method == "POST" and 'edit-comment' in request.POST:
+        formComment = CommentForm(request.POST)
+        if formComment.is_valid():
+            id_edit = request.POST.get('id_edit')
+            comment_to_edit = Comments.objects.get(id=id_edit)
+            if request.POST.get('title'):
+                comment_to_edit.title = request.POST.get('title')
+            if request.POST.get('text'):
+                comment_to_edit.text = request.POST.get('text')
+            comment_to_edit.save()
+    elif request.method == "POST" and request.POST.get('option') == 'edit':
+        companytoedit = Companies.objects.get(id=id)
+        formEdit = CompanyForm(request.POST)
+        if formEdit.is_valid() and len(str(request.POST.get('nip'))) == 9:
+            if request.POST.get('name'):
+                companytoedit.name = request.POST.get('name')
+            if request.POST.get('phone'):
+                companytoedit.phone = request.POST.get('phone')
+            if request.POST.get('st_address'):
+                companytoedit.st_address = request.POST.get('st_address')
+            if request.POST.get('city'):
+                companytoedit.city = request.POST.get('city')
+            if request.POST.get('nip'):
+                companytoedit.nip = request.POST.get('nip')
+            companytoedit.save()
+        else:
+            valid_error = True
+    elif request.method == "POST" and request.POST.get('option') == 'del':
+        id_del = id
+        companytodel = Companies.objects.get(id = id_del)
+        commentstodel = Comments.objects.filter(company = companytodel)
+        commentstodel.delete()
+        companytodel.delete()
+        return redirect('companies_page')
+    elif request.method == "POST" and request.POST.get('option') == 'dl-cmt':
+        id_del = request.POST.get('id_del')
+        commenttodel = Comments.objects.get(id = id_del)
+        commenttodel.delete()
+        #return redirect('company_details', id = id)
     try:
         company = Companies.objects.get(id = id)#id od firmy =id
     except ObjectDoesNotExist:
         return render(request, '404_company.html')
     except MultipleObjectsReturned:
         company = Companies.objects.filter(id = id).latest('id')
-    return render(request,'company_details.html',{'comments': comments, 'company':company,})
+    return render(request,'company_details.html',{'comments': comments, 'company':company, 'comment_form':formComment})
 
 @login_required(login_url='login/')
 def test_page(request):
-    page = request.GET.get('page')
-    keyword = request.GET.get('search')
-    sort_by = request.GET.get('order')
-    sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip'}
-    if not sort_by in sort_dic:
-        sort_by = 'cn'
-    been_searched = False
-    valid_error = False
-
-    if request.method == "POST" and request.POST.get('option')=='add':
-        formAdd = CompanyForm(request.POST)
-        if formAdd.is_valid() and len(str(request.POST.get('nip'))) == 9:
-            formAdd.save()
-            return redirect('test_page')
-        else:
-            companies = Companies.objects.all().order_by('name')
-            valid_error = True #    return render(request,'test_page.html', {'companies': companies, 'valid_error': valid_error})
-    elif request.method == "POST" and request.POST.get('option')=='del':
-        id_del = request.POST.get('id_del')
-        companytodel = Companies.objects.get(id=id_del)
-        companytodel.delete()
-        return redirect('test_page')
-    elif request.method == "POST" and request.POST.get('option')=='edit':
-        id_edit = request.POST.get('id_edit')
-        companytoedit = Companies.objects.get(id=id_edit)
-        formEdit = CompanyForm(request.POST)
-        if formEdit.is_valid() and len(str(request.POST.get('nip'))) == 9:
-            companytoedit.name = request.POST.get('name')
-            companytoedit.nip = request.POST.get('nip')
-            companytoedit.save()
-            return redirect('test_page')
-        else:
-            companies = Companies.objects.all().order_by('name')
-            valid_error = True #    return render(request,'test_page.html', {'companies': companies, 'valid_error': valid_error})
-    elif keyword:
-        companies = Companies.objects.all().order_by(sort_dic[sort_by]).filter(Q(nip__icontains = keyword)|Q(name__icontains = keyword))
-        been_searched = True
-    else:
-        companies = Companies.objects.all().order_by(sort_dic[sort_by])
-
-    paginator = Paginator(companies, 5) # pokaż 5 na stronę
-    try:
-        companies = paginator.page(page)
-    except PageNotAnInteger:
-        companies = paginator.page(1) # jeżeli strona nie jest liczbą pokaż pierwszą
-    except EmptyPage:
-        companies = paginator.page(paginator.num_pages) # jeżeli strona poza zasięgiem pokaż ostatnią
-    if been_searched and sort_by:
-        return render(request,'test_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword, 'sorted_by': sort_by })
-    elif been_searched:
-        return render(request, 'test_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword})
-    elif sort_by:
-        return render(request, 'test_page.html', {'companies': companies, 'valid_error': valid_error, 'sorted_by': sort_by})
-    return render(request,'test_page.html', {'companies': companies, 'valid_error': valid_error, 'sort_by':'cn'})
+    return redirect('home')

@@ -1,4 +1,7 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Companies(models.Model):
@@ -35,5 +38,15 @@ class Companies(models.Model):
         return len(str(self.phone))
 
 class Comments(models.Model):
-    text = models.TextField()
-    parent_id = models.ForeignKey(Companies)
+    company = models.ForeignKey(Companies, related_name='comment_parent', default=1)
+    author = models.ForeignKey(User, related_name='comment_author', default=1)
+    title = models.CharField(max_length=80, default = 'Brak tytułu ')
+    text = models.TextField(default = 'pusty komentarz')
+    created = models.DateTimeField(auto_now=True, auto_now_add=False)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'Komentarz {} dodany przez {}'.format(self.title, self.author.username)

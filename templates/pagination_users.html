@@ -2,7 +2,7 @@
   <ul class="pagination pagination-sm">
      {% if users.has_previous %}
             <li class="paginate_button previous">
-               <a href="/users?page={{ users.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
+               <a href="?page={{ users.previous_page_number }}{% if search_phrase %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Poprzednia</a>
             </li>
      {% else %}
            <li class="paginate_button previous disabled">
@@ -11,12 +11,12 @@
      {% endif %}
 
      {% for page in users.paginator.page_range %}
-            <li class="{% if users.number == page  %}active{% endif %}"><a href="/users?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
+            <li class="{% if users.number == page  %}active{% endif %}"><a href="?page={{ page }}{% if search_phrese %}&search={{ search_phrase }}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">{{ page }}</a></li>
      {% endfor %}
 
      {% if users.has_next %}
          <li class="paginate_button next">
-             <a href="/users?page={{ users.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
+             <a href="?page={{ users.next_page_number }}{% if search_phrase %}&search={{ search_phrase}}{% endif %}{% if sorted_by %}&order={{sorted_by}}{% endif %}">Następna</a>
          </li>
      {% else %}
      <li class="paginate_button next disabled">
