@@ -61,7 +61,7 @@ def companies_page(request):
             companies = Companies.objects.all().order_by('name')
             valid_error = True #    return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error})
     elif keyword:
-        companies = Companies.objects.all().order_by(sort_dic[sort_by]).filter(Q(nip__icontains = keyword)|Q(name__icontains = keyword))
+        companies = Companies.objects.all().order_by(sort_dic[sort_by]).filter( Q(nip__icontains = keyword)|Q(name__icontains = keyword)|Q(city__icontains = keyword)|Q(phone__icontains = keyword)|Q(st_address__icontains = keyword) )
         been_searched = True
     else:
         companies = Companies.objects.all().order_by(sort_dic[sort_by])
