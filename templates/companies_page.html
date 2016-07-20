@@ -114,3 +114,40 @@
     </div> <!-- end of row -->
 </div><!-- end of contrainer -->
 {% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+$(function(){
+ function submitState(el) {
+
+    var $form = $(el),
+        $requiredInputs = $form.find('input:required'),
+        $submit = $form.find('button[type="submit"]');
+
+    $submit.attr('disabled', 'disabled');
+
+    $requiredInputs.keyup(function () {
+
+      $form.data('empty', 'false');
+
+      $requiredInputs.each(function() {
+        if ($(this).val() === '') {
+          $form.data('empty', 'true');
+        }
+      });
+
+      if ($form.data('empty') === 'true') {
+        $submit.attr('disabled', 'disabled').attr('title', 'Wypełnij wszystkie wymagane pola!');
+        $('.sendButton').attr('disabled', false);
+      } else {
+        $submit.removeAttr('disabled').attr('title', 'Wyślij');
+      }
+    });
+  }
+
+  // apply to each form element individually
+  submitState('#add_company');
+  submitState('#edit_company{{ company.id }}');
+});
+</script>
+{% endblock %}

@@ -7,16 +7,16 @@
         <h4 class="modal-title" id="myModalLabel">Edytuj {{ comment }}</h4>
       </div>
       <div class="modal-body">
-        <form action="." method="post">
+        <form id="edit_comment{{ comment.id }}" action="." method="post">
           {% csrf_token %}
               <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ comment.id }} />
                   <div class="form-group">
                     <label for="id_title">Tytuł:</label>
-                    <input class="form-control" id="id_title" maxlength="80" name="title" value="{{ comment.title|safe }}" type="text">
+                    <input class="form-control" id="id_title" maxlength="80" name="title" value="{{ comment.title|safe }}" type="text" required>
                   </div>
                   <div class="form-group">
                     <label for="id_text">Tekst:</label></td>
-                    <textarea class="form-control" id="id_text" name="text" cols="23" rows="5">{{ comment.text|safe }}</textarea>
+                    <textarea class="form-control" id="id_text" name="text" cols="23" rows="5" required>{{ comment.text|safe }}</textarea>
                   </div>
               <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
             <button type="submit" class="btn btn-primary" name="edit-comment" value="edit" />Zapisz</button>

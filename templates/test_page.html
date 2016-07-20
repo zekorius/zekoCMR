@@ -1,138 +1,23 @@
-{% extends 'base.html' %}
-
+{% extends 'base-test.html' %}
 
 {% block page-title %}
-<h3>Firmy</h3>
+<h3>zekoCMR</h3>
 {% endblock %}
 
 
 {% block x_title %}
-<h2>Strona zarządzania firmami</h2>
+<h2>Strona testowa zekoCMR</h2>
 {% endblock %}
-
 
 {% block content %}
 
 <div class="container">
     <div class="row">
         <div class="jumbotron">
-            {% if valid_error %}
-             {# If user typed wrong data while adding company, then show this alter #}
-                <div class="alert alert-warning alert-dismissible" role="alert">
-                <p>
-                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    Nie można dodać firmy ze względu na błędne dane!<br>Pamiętaj, że nip ma 9 cyfr i zarówno on jak i pole nazwa jest wymagane.
-                </p>
-                </div>
-            {% endif %}
+            <h3>Witaj {{ user.username }}</h3>
+            <p>Jesteś na stronie testowej zekoCMR.<br></p>
+            <p><a class="btn btn-primary" href="/companies">firmy</a>    <a class="btn btn-primary" href="/users">użytkownicy</a></p>
 
-            <div class="panel panel-default">
-            <div class="panel-heading">
-              <div class="row">
-                  <div class="col-sm-4">
-                    <br><br>{% include 'addcompanybutton.html' %}
-                  </div>
-                  <div class="col-sm-8">
-                    <br><br>{% include 'search_company.html' %}
-                  </div>
-              </div>
-              {% include 'pagination_test.html' %}
-            </div><!-- end of panel heading -->
-            <!-- Table with records from Companies -->
-            <div class="panel-body">
-            <table class="table table-striped">
-                <caption>Lista firm.</caption>
-                <thead>
-                    <tr>
-                        <th><a href="/test?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
-                        <th><a href="/test?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
-                        <th>Akcja</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for company in companies %}
-                    <tr>
-                        <td>{{ company }}</td>
-                        <td>{{ company.nip }}</td>
-                        <td>
-                            <!-- EDITION OF COMPANIES -->
-                                <a data-toggle="modal" href="#" data-target="#editCompany{{ company.id }}Modal">
-                                  edytuj
-                                </a>
-                                <!-- Modal -->
-                                <div class="modal fade" id="editCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">Edytuj firmę {{ company }}</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        Wpisz dane: Nazwa firmy jest wymagana, a nip musi mieć 9 cyfr.
-                                        <form method="POST" class="post-form">{% csrf_token %}
-                                            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="edit" />
-                                            <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ company.id }} />
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_name">Nazwa:</label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              <input id="id_name" type="CharField" name="name" max_length="70" value="{{ company.name }}" required />
-                                            </div>
-                                              <label class="control-label col-md-3 col-sm-3 col-xs-12"for="id_nip">Nip:</label>
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              <input id="id_nip" type="IntegerField" name="nip" value="{{ company.nip }}" required />
-                                            </div>
-                                      </div>
-                                      <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-                                            <button type="submit" class="btn btn-primary">Zapisz</button>
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                            <!-- END OF EDITION -->
-                                /
-
-                           <!-- DELETING COMPANIES -->
-                           <a data-toggle="modal" data-target="#deleteCompany{{ company.id }}Modal">
-                             usuń
-                           </a>
-                           <!-- Modal -->
-                           <div class="modal fade" id="deleteCompany{{ company.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                             <div class="modal-dialog" role="document">
-                               <div class="modal-content">
-                                 <div class="modal-header">
-                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                   <h4 class="modal-title" id="myModalLabel">Potwierdzenie usunięcia</h4>
-                                 </div>
-                                 <form method="POST" class="post-form">{% csrf_token %}
-                                     <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="del" />
-                                     <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ company.id }} />
-                                     <div class="modal-body">
-                                       Czy napewno chcesz usunąć firmę "{{ company }}"&#63;
-
-                                     </div>
-                                     <div class="modal-footer">
-
-                                       <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                                       <button type="submit" class="btn btn-primary">Usuń</button>
-                                     </div>
-                                 </form>
-                               </div>
-                             </div>
-                           </div>
-                           <!-- END OF DELETING COMPANIES -->
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>}
-          </div><!-- end of panel body -->
-        </div><!-- end of panel -->
-        <p>potestujmy company</p>
-          {% for company in companies %}
-              <a href="{% url 'company_details' id=company.id %}">{{ company.id }}</a>
-          {% endfor %}
-        <p>koniec testu</p>
         </div>
     </div>
 </div>

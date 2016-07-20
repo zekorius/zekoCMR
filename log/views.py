@@ -226,4 +226,4 @@ def company_details(request, id):
 
 @login_required(login_url='login/')
 def test_page(request):
-    return redirect('home')
+    return render(request,'test_page.html')
