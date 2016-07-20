@@ -4,3 +4,5 @@ db.sqlite3
 .DS_Store
 wirtualka/
 templates/gentelella-master
+log/migrations/*
+
