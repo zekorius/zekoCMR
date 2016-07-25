@@ -1,0 +1,32 @@
+<!-- button you should click to add company -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPDFModal">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Dodaj Plik PDF
+</button>
+<!-- Modal -->
+<div class="modal fade" id="addPDFModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Dodaj plik PDF</h4>
+      </div>
+      <div class="modal-body">
+        <form id="add_PDF" method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+            <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="add_pdf" />
+            <div class="form-group">
+              <label for="id_name">Nazwa:</label>
+              {{ pdf_form.companypdf }}
+            </div>
+            <input type="hidden" id="id_company" type="IntegerField" name="company" value="1" />
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-primary">Zapisz</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of button and it's modal -->

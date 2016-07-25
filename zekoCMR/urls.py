@@ -23,4 +23,4 @@ urlpatterns = [
     url(r'', include('log.urls')),
     url(r'^login/$', views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}),
     url(r'^logout/$', views.logout, {'next_page': '/login'}),
-]
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

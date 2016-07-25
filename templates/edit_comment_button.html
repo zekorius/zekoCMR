@@ -1,3 +1,4 @@
+{% load widget_tweaks %}
 <!-- Modal -->
 <div class="modal fade" id="editComment{{ comment.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -10,12 +11,12 @@
         <form id="edit_comment{{ comment.id }}" action="." method="post">
           {% csrf_token %}
               <input type="hidden" id="id_id_edit" type="IntegerField" name="id_edit" value={{ comment.id }} />
+                  {{ comment_form.title.errors }}
                   <div class="form-group">
-                    <label for="id_title">Tytuł:</label>
-                    <input class="form-control" id="id_title" maxlength="80" name="title" value="{{ comment.title|safe }}" type="text" required>
+                    {{ comment_form.title.label_tag }}{% render_field comment_form.title value=comment.title %}
                   </div>
                   <div class="form-group">
-                    <label for="id_text">Tekst:</label></td>
+                    <label for="id_text">Tekst:</label>
                     <textarea class="form-control" id="id_text" name="text" cols="23" rows="5" required>{{ comment.text|safe }}</textarea>
                   </div>
               <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>

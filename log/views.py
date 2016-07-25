@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from .models import Companies, Comments
-from .forms import CompanyForm, LookforForm, CommentForm
+from .models import Companies, Comments, PdfFiles
+from .forms import CompanyForm, LookforForm, CommentForm, PdfFilesForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -226,4 +227,33 @@ def company_details(request, id):
 
 @login_required(login_url='login/')
 def test_page(request):
-    return render(request,'test_page.html')
+    print('niby jestem w test_page')
+    if request.method == "POST" and request.POST.get('option')=='add_pdf':
+        print('debug: Im there')
+        pdf_form = PdfFilesForm(request.POST, request.FILES)
+        print(Companies.objects.get(id = 1))
+        try:
+            if pdf_form.is_valid():
+                newfile = PdfFiles(companypdf = request.FILES['companypdf'], company =  Companies.objects.get(id = 1))
+                print('forma działa\n a plik to:')
+                print(newfile.companypdf)
+                print('teraz przydałoby się sprawdzić czy jest pdfem')
+                print(newfile.companypdf.name.endswith('.pdf'))
+                print('teraz przydałoby się sprawdzić czy jest <100Mb')
+                print(newfile.companypdf.size)
+                print(newfile.companypdf.size < 104857600)
+                uploaded = ((newfile.companypdf.size < 104857600) and (newfile.companypdf.name.endswith('.pdf')) )
+                if not uploaded:
+                    raise
+                else:
+                    newfile.save()
+                    pdf_files = PdfFiles.objects.all()
+                    return render(request,'test_page.html',{'pdf_form':pdf_form,'uploaded':uploaded, 'pdf_files':pdf_files})
+        except:
+            invalid_data = True
+            return render(request,'test_page.html',{'pdf_form':pdf_form,'invalid_data':invalid_data})
+        return redirect('test_page')
+    else:
+        pdf_form = PdfFilesForm()
+    pdf_files = PdfFiles.objects.all()
+    return render(request,'test_page.html',{'pdf_form':pdf_form, 'pdf_files':pdf_files})

@@ -50,3 +50,7 @@ class Comments(models.Model):
 
     def __str__(self):
         return 'Komentarz {} dodany przez {}'.format(self.title, self.author.username)
+
+class PdfFiles(models.Model):
+    companypdf = models.FileField(upload_to='pdfs/')
+    company = models.ForeignKey(Companies, related_name='pdf_parent')

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'log',
-    'debug_toolbar'
+    'debug_toolbar',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,3 +131,7 @@ os.path.join(BASE_DIR, "static"),
 
 # Redirect to home after login
 LOGIN_REDIRECT_URL = '/'
+
+#files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

@@ -15,9 +15,29 @@
     <div class="row">
         <div class="jumbotron">
             <h3>Witaj {{ user.username }}</h3>
+            {% if invalid_data %}
+             <div class="alert alert-danger alert-dismissible" role="alert">
+             <p>
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <strong>Wysyłanie pliku nie powiodło się</strong><br>
+               Plik musi być w formacie pdf i nie może przekroczyć 100MB
+             </p>
+             </div>
+            {% endif %}
+            {% if uploaded %}
+             <div class="alert alert-success alert-dismissible" role="alert">
+             <p>
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+               <strong>Dodano plik</strong>
+             </div>
+             </p>
+            {% endif %}
             <p>Jesteś na stronie testowej zekoCMR.<br></p>
-            <p><a class="btn btn-primary" href="/companies">firmy</a>    <a class="btn btn-primary" href="/users">użytkownicy</a></p>
-
+            {% include 'add_pdf_button.html' %}
+            <p>pliki</p>
+            {% for file in pdf_files %}
+            :D ebin <a href="{{file.companypdf.url}}">{{ file.companypdf.name}}</a><br>
+            {% endfor %}
         </div>
     </div>
 </div>

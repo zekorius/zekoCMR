@@ -10,7 +10,7 @@
           <input type="hidden" id="id_option" type="CharField" name="option" max_length="10" value="dl-cmt" />
           <input type="hidden" id="id_id_del" type="IntegerField" name="id_del" value={{ comment.id }} />
           <div class="modal-body">
-            Czy napewno chcesz usunąć komentarz "{{ comment.text|truncatewords:15 }}"&#63;
+            Czy napewno chcesz usunąć "{{ comment }}"&#63;
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>

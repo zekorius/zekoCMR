@@ -45,10 +45,12 @@
                   <div class="panel-title">{{ comment.title|safe }}</div>
                   <div class="panel-heading">Utworzony {{ comment.created }} przez {{ comment.author }}</div>
                   <div class="panel-body">{{ comment.text|safe }}</div>
+                  {% if user.id == comment.author.id %}
                   <div class="panel-footer"><a data-toggle="modal" href="#" data-target="#editComment{{ comment.id }}Modal"><i class="fa fa-pencil"></i> edytuj</a> / <a data-toggle="modal" href="#" data-target="#deleteComment{{ comment.id }}Modal"><i class="fa fa-trash"></i> usuń</a></div>
-                  {% include 'delcomment.html' %}
-                  {% include 'edit_comment_button.html' %}
-                </div>
+                      {% include 'delcomment.html' %}
+                      {% include 'edit_comment_button.html' %}
+                    </div>
+                  {% endif %}
             {% endfor %}
             </div>
         </div>
@@ -88,8 +90,8 @@ $(function(){
 
   // apply to each form element individually
   submitState('#add_comment');
-  submitState('#edit_comment{{ comment.id }}');
-  submitState('#edit_company{{ company.id }}');
+  //submitState('#edit_comment{{ comment.id }}');
+  //submitState('#edit_company{{ company.id }}');
 });
 </script>
 {% endblock %}
