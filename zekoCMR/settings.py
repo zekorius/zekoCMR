@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'categories',
     'debug_toolbar',
     'widget_tweaks',
+    'colorful',
 ]
 
 MIDDLEWARE_CLASSES = [

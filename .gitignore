@@ -6,4 +6,4 @@ wirtualka/
 templates/gentelella-master
 zekoCMR/settings_hidden.py
 log/migrations/*
-
+media/
