@@ -39,6 +39,8 @@ def companies_page(request):
         companytodel = Companies.objects.get(id=id_del)
         commentstodel = Comments.objects.filter(company = companytodel)
         commentstodel.delete()
+        docstodel = PdfFiles.objects.filter(company = companytodel)
+        docstodel.delete()
         companytodel.delete()
         return redirect('companies_page')
     elif request.method == "POST" and request.POST.get('option')=='edit':
@@ -170,6 +172,8 @@ def users_page(request):
 def company_details(request, id):
     comments = Comments.objects.filter(company = id)
     formComment = CommentForm()
+    uploaded = False
+    invalid_data = False
     if request.method == "POST" and 'add-comment' in request.POST:
         auth_id = (request.POST.get('id_user'))
         formComment = CommentForm(request.POST)
@@ -210,6 +214,8 @@ def company_details(request, id):
         companytodel = Companies.objects.get(id = id_del)
         commentstodel = Comments.objects.filter(company = companytodel)
         commentstodel.delete()
+        docstodel = PdfFiles.objects.filter(company = companytodel)
+        docstodel.delete()
         companytodel.delete()
         return redirect('companies_page')
     elif request.method == "POST" and request.POST.get('option') == 'dl-cmt':
@@ -217,43 +223,66 @@ def company_details(request, id):
         commenttodel = Comments.objects.get(id = id_del)
         commenttodel.delete()
         #return redirect('company_details', id = id)
+    elif request.method == "POST" and request.POST.get('option') == 'add_pdf':
+        pdf_form = PdfFilesForm(request.POST, request.FILES)
+        try:
+            if pdf_form.is_valid():
+                newfile = PdfFiles(companypdf = request.FILES['companypdf'],
+                company =  Companies.objects.get(id = id))
+                uploaded = ((newfile.companypdf.size < 104857600) and (newfile.companypdf.name.endswith('.pdf')) )
+                if not uploaded:
+                    raise
+                else:
+                    newfile.save()
+        except:
+            invalid_data = True
+    elif request.method == "POST" and request.POST.get('option') == 'del_pdf':
+        id_del = request.POST.get('id_del')
+        doctodel = PdfFiles.objects.get(id = id_del)
+        doctodel.delete()
     try:
         company = Companies.objects.get(id = id)#id od firmy =id
     except ObjectDoesNotExist:
         return render(request, '404_company.html')
     except MultipleObjectsReturned:
         company = Companies.objects.filter(id = id).latest('id')
-    return render(request,'company_details.html',{'comments': comments, 'company':company, 'comment_form':formComment})
+    pdf_form = PdfFilesForm()
+    pdf_files = PdfFiles.objects.filter(company = company)
+    return render(request,'company_details.html',{'comments': comments,
+                  'company':company, 'comment_form':formComment,
+                  'pdf_files':pdf_files, 'uploaded':uploaded,
+                  'invalid_data':invalid_data, 'pdf_form':pdf_form})
 
 @login_required(login_url='login/')
 def test_page(request):
     print('niby jestem w test_page')
+    uploaded = False
+    invalid_data = False
     if request.method == "POST" and request.POST.get('option')=='add_pdf':
-        print('debug: Im there')
         pdf_form = PdfFilesForm(request.POST, request.FILES)
         print(Companies.objects.get(id = 1))
         try:
             if pdf_form.is_valid():
-                newfile = PdfFiles(companypdf = request.FILES['companypdf'], company =  Companies.objects.get(id = 1))
-                print('forma działa\n a plik to:')
-                print(newfile.companypdf)
-                print('teraz przydałoby się sprawdzić czy jest pdfem')
-                print(newfile.companypdf.name.endswith('.pdf'))
-                print('teraz przydałoby się sprawdzić czy jest <100Mb')
-                print(newfile.companypdf.size)
-                print(newfile.companypdf.size < 104857600)
+                newfile = PdfFiles(companypdf = request.FILES['companypdf'],
+                                   company =  Companies.objects.get(id = 1))
+                # print('forma działa\n a plik to:')
+                # print(newfile.companypdf)
+                # print('teraz przydałoby się sprawdzić czy jest pdfem')
+                # print(newfile.companypdf.name.endswith('.pdf'))
+                # print('teraz przydałoby się sprawdzić czy jest <100Mb')
+                # print(newfile.companypdf.size)
+                # print(newfile.companypdf.size < 104857600)
                 uploaded = ((newfile.companypdf.size < 104857600) and (newfile.companypdf.name.endswith('.pdf')) )
                 if not uploaded:
                     raise
                 else:
                     newfile.save()
-                    pdf_files = PdfFiles.objects.all()
-                    return render(request,'test_page.html',{'pdf_form':pdf_form,'uploaded':uploaded, 'pdf_files':pdf_files})
         except:
             invalid_data = True
-            return render(request,'test_page.html',{'pdf_form':pdf_form,'invalid_data':invalid_data})
-        return redirect('test_page')
-    else:
-        pdf_form = PdfFilesForm()
+    elif request.method == "POST" and request.POST.get('option')=='del_pdf':
+        id_del = request.POST.get('id_del')
+        doctodel = PdfFiles.objects.get(id = id_del)
+        doctodel.delete()
+    pdf_form = PdfFilesForm()
     pdf_files = PdfFiles.objects.all()
-    return render(request,'test_page.html',{'pdf_form':pdf_form, 'pdf_files':pdf_files})
+    return render(request,'test_page.html',{'pdf_form':pdf_form, 'pdf_files':pdf_files,'uploaded':uploaded, 'invalid_data':invalid_data,})

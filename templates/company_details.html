@@ -35,6 +35,32 @@
                   Adres: {{ company.st_address }}<br>
                   Miasto: {{ company.city }}<br>
               </div>
+              <div class="panel-footer">
+                Pliki:<br>
+                {% if invalid_data %}
+                 <div class="alert alert-danger alert-dismissible" role="alert">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <strong>Wysyłanie pliku nie powiodło się</strong><br>
+                   Plik musi być w formacie pdf i nie może przekroczyć 100MB
+                 </div>
+                {% endif %}
+                {% if uploaded %}
+                 <div class="alert alert-success alert-dismissible" role="alert">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <strong>Dodano plik</strong>
+                 </div>
+                {% endif %}
+                {% include 'add_pdf_button.html' %}
+                <br>
+                {% for file in pdf_files %}
+                <a href="{{file.companypdf.url}}"><i class="fa fa-file-pdf-o"></i> {{ file.companypdf.name}}</a>
+                -
+                <a data-toggle="modal" href="#" data-target="#deleteDoc{{ file.id }}Modal">
+                  <i class="fa fa-trash"></i> usuń
+                </a><br>
+                {% include 'deldoc.html' %}
+                {% endfor %}
+              </div>
             </div>
             <p>Komentarze:</p>
             {% include 'add_comment_button.html' %}
