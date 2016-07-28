@@ -15,13 +15,21 @@ class CompanyForm(forms.ModelForm):
         fields = ('name', 'nip', 'phone', 'st_address', 'city')
 
 class CommentForm(forms.ModelForm):
-
+    title = forms.CharField(max_length=80, label='Tytuł', widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'title', 'required': 'required'}))
+    text = forms.CharField(label='Treść', widget=forms.Textarea(attrs={'class': 'form-control', 'name': 'text', 'required': 'required'}))
     class Meta:
         model = Comments
-        fields = ('title','text')
+        fields = ('title', 'text')
 
 class LookforForm(forms.Form):
     keyword = forms.CharField(label='keyword', max_length=70, widget=forms.TextInput(attrs={'class': 'form-control', 'name': 'keyword'}))
 
     def get_keyword(self):
         return self.keyword
+
+class PdfFilesForm(forms.Form):
+    companypdf = forms.FileField(
+        label='Wybierz plik do zuploadowania',
+        help_text='maksymalnie 100Mb',
+        required='required',
+    )

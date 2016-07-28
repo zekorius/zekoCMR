@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from .models import Companies, Comments
-from .forms import CompanyForm, LookforForm, CommentForm
+from .models import Companies, Comments, PdfFiles
+from .forms import CompanyForm, LookforForm, CommentForm, PdfFilesForm
+from categories.models import Categories
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
@@ -19,7 +21,7 @@ def companies_page(request):
     sort_by = request.GET.get('order')
     sort_dic = {'cn':'name', '-cn':'-name', 'np':'nip', '-np':'-nip',
     'ph':'phone','-ph':'-phone', 'ct':'city', '-ct':'-city', 'st':'st_address',
-    '-st':'-st_address'}
+    '-st':'-st_address', 'ca':'category', '-ca':'-category'}
     if not sort_by in sort_dic:
         sort_by = 'cn'
     been_searched = False
@@ -28,7 +30,13 @@ def companies_page(request):
     if request.method == "POST" and request.POST.get('option')=='add':
         formAdd = CompanyForm(request.POST)
         if formAdd.is_valid() and len(str(request.POST.get('nip'))) == 9:
-            formAdd.save()
+            new_company = formAdd.save(commit = False)
+            new_company.category = Categories.objects.get(id = request.POST.get('company_category'))
+            new_company.save()
+                        # new_comment = formComment.save(commit=False)
+                        # new_comment.company = Companies.objects.get(id = id)
+                        # new_comment.author = User.objects.get(id = auth_id)
+                        # new_comment.save()
             return redirect('companies_page')
         else:
             companies = Companies.objects.all().order_by('name')
@@ -38,6 +46,8 @@ def companies_page(request):
         companytodel = Companies.objects.get(id=id_del)
         commentstodel = Comments.objects.filter(company = companytodel)
         commentstodel.delete()
+        docstodel = PdfFiles.objects.filter(company = companytodel)
+        docstodel.delete()
         companytodel.delete()
         return redirect('companies_page')
     elif request.method == "POST" and request.POST.get('option')=='edit':
@@ -55,13 +65,15 @@ def companies_page(request):
                 companytoedit.city = request.POST.get('city')
             if request.POST.get('nip'):
                 companytoedit.nip = request.POST.get('nip')
+            if request.POST.get('company_category'):
+                companytoedit.category = Categories.objects.get(id = request.POST.get('company_category'))
             companytoedit.save()
             return redirect('companies_page')
         else:
             companies = Companies.objects.all().order_by('name')
             valid_error = True #    return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error})
     elif keyword:
-        companies = Companies.objects.all().order_by(sort_dic[sort_by]).filter( Q(nip__icontains = keyword)|Q(name__icontains = keyword)|Q(city__icontains = keyword)|Q(phone__icontains = keyword)|Q(st_address__icontains = keyword) )
+        companies = Companies.objects.all().order_by(sort_dic[sort_by]).filter( Q(category__name__icontains = keyword)|Q(nip__icontains = keyword)|Q(name__icontains = keyword)|Q(city__icontains = keyword)|Q(phone__icontains = keyword)|Q(st_address__icontains = keyword) )
         been_searched = True
     else:
         companies = Companies.objects.all().order_by(sort_dic[sort_by])
@@ -73,13 +85,14 @@ def companies_page(request):
         companies = paginator.page(1) # jeżeli strona nie jest liczbą pokaż pierwszą
     except EmptyPage:
         companies = paginator.page(paginator.num_pages) # jeżeli strona poza zasięgiem pokaż ostatnią
+    categories = Categories.objects.all()
     if been_searched and sort_by:
-        return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword, 'sorted_by': sort_by })
+        return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword, 'sorted_by': sort_by, 'categories':categories, })
     elif been_searched:
-        return render(request, 'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword})
+        return render(request, 'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'search_phrase': keyword, 'categories':categories,})
     elif sort_by:
-        return render(request, 'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'sorted_by': sort_by})
-    return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'sort_by':'cn'})
+        return render(request, 'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'sorted_by': sort_by, 'categories':categories,})
+    return render(request,'companies_page.html', {'companies': companies, 'valid_error': valid_error, 'sort_by':'cn', 'categories':categories,})
 
 @login_required(login_url='login/')
 def users_page(request):
@@ -169,6 +182,8 @@ def users_page(request):
 def company_details(request, id):
     comments = Comments.objects.filter(company = id)
     formComment = CommentForm()
+    uploaded = False
+    invalid_data = False
     if request.method == "POST" and 'add-comment' in request.POST:
         auth_id = (request.POST.get('id_user'))
         formComment = CommentForm(request.POST)
@@ -209,6 +224,8 @@ def company_details(request, id):
         companytodel = Companies.objects.get(id = id_del)
         commentstodel = Comments.objects.filter(company = companytodel)
         commentstodel.delete()
+        docstodel = PdfFiles.objects.filter(company = companytodel)
+        docstodel.delete()
         companytodel.delete()
         return redirect('companies_page')
     elif request.method == "POST" and request.POST.get('option') == 'dl-cmt':
@@ -216,14 +233,68 @@ def company_details(request, id):
         commenttodel = Comments.objects.get(id = id_del)
         commenttodel.delete()
         #return redirect('company_details', id = id)
+    elif request.method == "POST" and request.POST.get('option') == 'add_pdf':
+        pdf_form = PdfFilesForm(request.POST, request.FILES)
+        try:
+            if pdf_form.is_valid():
+                newfile = PdfFiles(companypdf = request.FILES['companypdf'],
+                company =  Companies.objects.get(id = id))
+                uploaded = ((newfile.companypdf.size < 104857600) and (newfile.companypdf.name.endswith('.pdf')) )
+                if not uploaded:
+                    raise
+                else:
+                    newfile.save()
+        except:
+            invalid_data = True
+    elif request.method == "POST" and request.POST.get('option') == 'del_pdf':
+        id_del = request.POST.get('id_del')
+        doctodel = PdfFiles.objects.get(id = id_del)
+        doctodel.delete()
     try:
         company = Companies.objects.get(id = id)#id od firmy =id
     except ObjectDoesNotExist:
         return render(request, '404_company.html')
     except MultipleObjectsReturned:
         company = Companies.objects.filter(id = id).latest('id')
-    return render(request,'company_details.html',{'comments': comments, 'company':company, 'comment_form':formComment})
+    pdf_form = PdfFilesForm()
+    pdf_files = PdfFiles.objects.filter(company = company)
+    categories = Categories.objects.all()
+    return render(request,'company_details.html',{'comments': comments,
+                  'company':company, 'comment_form':formComment,
+                  'pdf_files':pdf_files, 'uploaded':uploaded,
+                  'invalid_data':invalid_data, 'pdf_form':pdf_form,
+                  'categories':categories,})
 
 @login_required(login_url='login/')
 def test_page(request):
-    return render(request,'test_page.html')
+    print('niby jestem w test_page')
+    uploaded = False
+    invalid_data = False
+    if request.method == "POST" and request.POST.get('option')=='add_pdf':
+        pdf_form = PdfFilesForm(request.POST, request.FILES)
+        print(Companies.objects.get(id = 1))
+        try:
+            if pdf_form.is_valid():
+                newfile = PdfFiles(companypdf = request.FILES['companypdf'],
+                                   company =  Companies.objects.get(id = 1))
+                # print('forma działa\n a plik to:')
+                # print(newfile.companypdf)
+                # print('teraz przydałoby się sprawdzić czy jest pdfem')
+                # print(newfile.companypdf.name.endswith('.pdf'))
+                # print('teraz przydałoby się sprawdzić czy jest <100Mb')
+                # print(newfile.companypdf.size)
+                # print(newfile.companypdf.size < 104857600)
+                uploaded = ((newfile.companypdf.size < 104857600) and (newfile.companypdf.name.endswith('.pdf')) )
+                if not uploaded:
+                    raise
+                else:
+                    newfile.save()
+        except:
+            invalid_data = True
+    elif request.method == "POST" and request.POST.get('option')=='del_pdf':
+        id_del = request.POST.get('id_del')
+        doctodel = PdfFiles.objects.get(id = id_del)
+        doctodel.delete()
+    pdf_form = PdfFilesForm()
+    pdf_files = PdfFiles.objects.all()
+    return render(request,'test_page.html',{'pdf_form':pdf_form, 'pdf_files':pdf_files,'uploaded':uploaded, 'invalid_data':invalid_data,})

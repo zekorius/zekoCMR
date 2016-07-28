@@ -30,10 +30,55 @@
               {% include 'delcompany.html' %}
               </div>
               <div class="panel-body">
-                  Telefon: {{ company.phone }}<br>
-                  Nip: {{ company.nip }}<br>
-                  Adres: {{ company.st_address }}<br>
-                  Miasto: {{ company.city }}<br>
+                <table>
+                  <tr>
+                    <td>Kategoria:</td>
+                    <td> {{ company.category }}</td>
+                    <td width="10px" bgcolor="{{ company.category.color }}"></td>
+                  </tr>
+                  <tr>
+                    <td>Telefon:</td>
+                    <td>{{ company.phone }}</td>
+                  </tr>
+                  <tr>
+                    <td>Nip:</td>
+                    <td>{{ company.nip }}</td>
+                  </tr>
+                  <tr>
+                    <td>Adres:</td>
+                    <td>{{ company.st_address }}</td>
+                  </tr>
+                  <tr>
+                    <td>Miasto:</td>
+                    <td>{{ company.city }}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="panel-footer">
+                Pliki:<br>
+                {% if invalid_data %}
+                 <div class="alert alert-danger alert-dismissible" role="alert">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <strong>Wysyłanie pliku nie powiodło się</strong><br>
+                   Plik musi być w formacie pdf i nie może przekroczyć 100MB
+                 </div>
+                {% endif %}
+                {% if uploaded %}
+                 <div class="alert alert-success alert-dismissible" role="alert">
+                   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   <strong>Dodano plik</strong>
+                 </div>
+                {% endif %}
+                {% include 'add_pdf_button.html' %}
+                <br>
+                {% for file in pdf_files %}
+                <a href="{{file.companypdf.url}}"><i class="fa fa-file-pdf-o"></i> {{ file.companypdf.name}}</a>
+                -
+                <a data-toggle="modal" href="#" data-target="#deleteDoc{{ file.id }}Modal">
+                  <i class="fa fa-trash"></i> usuń
+                </a><br>
+                {% include 'deldoc.html' %}
+                {% endfor %}
               </div>
             </div>
             <p>Komentarze:</p>
@@ -45,10 +90,12 @@
                   <div class="panel-title">{{ comment.title|safe }}</div>
                   <div class="panel-heading">Utworzony {{ comment.created }} przez {{ comment.author }}</div>
                   <div class="panel-body">{{ comment.text|safe }}</div>
+                  {% if user.id == comment.author.id %}
                   <div class="panel-footer"><a data-toggle="modal" href="#" data-target="#editComment{{ comment.id }}Modal"><i class="fa fa-pencil"></i> edytuj</a> / <a data-toggle="modal" href="#" data-target="#deleteComment{{ comment.id }}Modal"><i class="fa fa-trash"></i> usuń</a></div>
-                  {% include 'delcomment.html' %}
-                  {% include 'edit_comment_button.html' %}
-                </div>
+                      {% include 'delcomment.html' %}
+                      {% include 'edit_comment_button.html' %}
+                    </div>
+                  {% endif %}
             {% endfor %}
             </div>
         </div>
@@ -88,8 +135,8 @@ $(function(){
 
   // apply to each form element individually
   submitState('#add_comment');
-  submitState('#edit_comment{{ comment.id }}');
-  submitState('#edit_company{{ company.id }}');
+  //submitState('#edit_comment{{ comment.id }}');
+  //submitState('#edit_company{{ company.id }}');
 });
 </script>
 {% endblock %}

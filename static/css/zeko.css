@@ -8,3 +8,9 @@ textarea
   margin:5px 0;
   padding:3px;
 }
+
+.colorsample
+{
+  width: 5px;
+  background-color: #ff9400;
+}

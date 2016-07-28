@@ -13,15 +13,15 @@
       <div class="modal-body">
         <form id="add_comment" action="." method="post">
             {% csrf_token %}
-            <div class="form-group">
-              <label for="id_title">Tytuł:</label> <input class="form-control" id="id_title" maxlength="80" name="title" value="" type="text" required>
-            </div>
-            <div class="form-group">
-              <label for="id_text">Tekst:</label> <textarea class="form-control" id="id_text" name="text" cols="88" rows="10" required></textarea>
-            </div>
+            {% for field in comment_form %}
+              {{ field.errors }}
+              <div class="form-group">
+                {{ field.label_tag }}{{ field }}
+              </div>
+            {% endfor %}
             <input type="hidden" id="id_id_user" type="IntegerField" name="id_user" value={{ user.id }} />
             <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
-            <button type="submit" class="btn btn-primary" name="add-comment" value="add" disabled="disabled" />Zapisz</button>
+            <button type="submit" class="btn btn-primary" name="add-comment" value="add" />Zapisz</button><!-- disabled="disabled" -->
         </form>
 
       </div>
