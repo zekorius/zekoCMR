@@ -4,5 +4,6 @@ db.sqlite3
 .DS_Store
 wirtualka/
 templates/gentelella-master
+zekoCMR/settings_hidden.py
 log/migrations/*
-
+media/

@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+<!-- button you should click to add category -->
+<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCategoryModal">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Dodaj kategorię
+</button>
+<!-- Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Dodaj komentarz</h4>
+      </div>
+      <div class="modal-body">
+        <form id="add_cattegory" action="." method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              Kolor:<br>
+              {{ form_category.color }}
+            </div>
+            <div class="form-group">
+              Nazwa:{% render_field form_category.name class="form-control" required="required" %}
+            </div>
+            <input type="hidden" id="id_id_user" type="IntegerField" name="id_user" value={{ user.id }} />
+            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+            <button type="submit" class="btn btn-primary" name="add_category" value="add" />Zapisz</button><!-- disabled="disabled" -->
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of button and it's modal -->

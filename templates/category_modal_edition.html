@@ -1,0 +1,28 @@
+{% load widget_tweaks %}
+<!-- Modal -->
+<div class="modal fade" id="editCategory{{ category.id }}Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edytuj {{ category }}</h4>
+      </div>
+      <div class="modal-body">
+        <form id="edit_category{{ category.id }}" action="." method="post">
+          {% csrf_token %}
+          <input id="id_id_edit" type="hidden" type="IntegerField" name="id_edit" value="{{ category.id }}">
+          <div class="form-group">
+            Kolor:<br>
+            {% render_field form_category.color value=category.color %}
+          </div>
+          <div class="form-group">
+            Nazwa:{% render_field form_category.name class="form-control" required="required" value=category.name %}
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+          <button type="submit" class="btn btn-primary" name="edit_category" value="edit" />Zapisz</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of button and it's modal -->

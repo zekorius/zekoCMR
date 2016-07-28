@@ -43,26 +43,29 @@
               <div class="panel panel-body">
             <!-- Table with records from Companies -->
             <table class="table table-striped">
-                <caption>Lista firm.</caption>
+                <caption>Lista firm:</caption>
                 <thead>
                     <tr>
-                        <th><a href="/companies?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
-                        <th><a href="/companies?order={% if sorted_by == 'ph' %}-{% endif %}ph{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Telefon</a></th>
-                        <th><a href="/companies?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
-                        <th><a href="/companies?order={% if sorted_by == 'st' %}-{% endif %}st{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Adres</a></th>
-                        <th><a href="/companies?order={% if sorted_by == 'ct' %}-{% endif %}ct{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Miasto</a></th>
-                        <th>Akcja</th>
+                      <th width="10%" colspan="2"><a href="/companies?order={% if sorted_by == 'ca' %}-{% endif %}ca{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Kategoria</a></th>
+                      <th><a href="/companies?order={% if sorted_by == 'cn' %}-{% endif %}cn{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Nazwa firmy</a></th>
+                      <th><a href="/companies?order={% if sorted_by == 'ph' %}-{% endif %}ph{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Telefon</a></th>
+                      <th><a href="/companies?order={% if sorted_by == 'np' %}-{% endif %}np{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">NIP</a></th>
+                      <th><a href="/companies?order={% if sorted_by == 'st' %}-{% endif %}st{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Adres</a></th>
+                      <th><a href="/companies?order={% if sorted_by == 'ct' %}-{% endif %}ct{% if users %}&page={{ companies.number }}{% endif %}{% if search_phrase %}&search={{ search_phrase}}{% endif %}">Miasto</a></th>
+                      <th width="10%">Akcja</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for company in companies %}
                     <tr>
-                        <td><a href="{% url 'company_details' id=company.id %}">{{ company }}</a></td>
-                        <td>{{ company.phone }}</td>
-                        <td>{{ company.nip }}</td>
-                        <td>{{ company.st_address }}</td>
-                        <td>{{ company.city }}</td>
-                        <td>
+                      {# <a href="#" data-toggle="tooltip" title="{{ company.category.name }}"></a> #}
+                      <td width="5px" bgcolor="{{ company.category.color }}"></td><td>{{ company.category }}</td>
+                      <td><a href="{% url 'company_details' id=company.id %}" data-toggle="tooltip" title="{{ company.category.name }}">{{ company }}</a></td>
+                      <td>{{ company.phone }}</td>
+                      <td>{{ company.nip }}</td>
+                      <td>{{ company.st_address }}</td>
+                      <td>{{ company.city }}</td>
+                      <td>
                             <!-- EDITION OF COMPANIES -->
                                 <a data-toggle="modal" href="#" data-target="#editCompany{{ company.id }}Modal">
                                   <i class="fa fa-pencil"></i> edytuj
@@ -110,6 +113,26 @@
             {% include 'pagination_company.html' with pages=companies %}
           </div>
         </div><!--end of panel-->
+        <p>tylko coś testuję</p>
+
+
+
+
+        <!-- <div class="form-group">
+          <label>Select Custom</label>
+          <select class="select2_single form-control" tabindex="-1">
+            <option></option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div> -->
+
+
+
+
+
+        <p>koniec testu</p>
         </div><!-- end of joombortron -->
     </div> <!-- end of row -->
 </div><!-- end of contrainer -->

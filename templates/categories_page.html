@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block page-title %}
+<h3>zekoCMR</h3>
+{% endblock %}
+
+
+{% block x_title %}
+<h2>Strona zarządzania kategoriami</h2>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="jumbotron">
+          {% if def_del %}
+          <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              Ta kategoria jest kategorią domyślną! Nie można jej usunąć!
+          </div>
+          {% endif %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3>Kategorie</h3> {% include 'add_category_button.html' %}
+            </div>
+            <div class="panel-body">
+              tutaj będzie tabela
+              <p>tylko coś testuje</p>
+              <table class="table table-striped">
+                  <caption>Lista firm.</caption>
+                  <thead>
+                      <tr>
+                        <th width="5%">id</th>
+                        <th colspan="2" width="10%">Kolor</th>
+                        <th>Nazwa</th>
+                        <th width="10%">Akcja</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  {% for category in categories %}
+                      <tr>
+                          <td>{{ category.id }}</td>
+                          <td width="5px" bgcolor="{{category.color}}"></td>
+                          <td>{{ category.color }}</td>
+                          <td>{{ category.name }}</td>
+                          <td>
+                            <!-- EDITION OF COMPANIES -->
+                            <a data-toggle="modal" href="#" data-target="#editCategory{{ category.id }}Modal">
+                              <i class="fa fa-pencil"></i> edytuj
+                            </a>
+                            {% include 'category_modal_edition.html' %}
+                            <!-- END OF EDITION -->
+                            /
+                            <!-- DELETING category -->
+                            <a data-toggle="modal" href="#" data-target="#deleteCategory{{ category.id }}Modal">
+                              <i class="fa fa-trash"></i> usuń
+                            </a>
+                            {% include 'category_modal_deletion.html' %}
+                            <!-- END OF DELETING COMPANIES -->
+                          </td>
+                      </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+
+              <p>koniec testu</p>
+            </div>
+          </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
