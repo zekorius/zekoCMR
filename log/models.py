@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from categories.models import Categories
 
 # Create your models here.
 class Companies(models.Model):
@@ -9,6 +10,7 @@ class Companies(models.Model):
     st_address = models.CharField(max_length = 40)
     city = models.CharField(max_length = 30)
     phone = models.IntegerField()
+    category = models.ForeignKey(Categories, related_name="company_category")
 
     def __str__(self):
         return self.name

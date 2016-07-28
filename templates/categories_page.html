@@ -14,6 +14,12 @@
 <div class="container">
     <div class="row">
         <div class="jumbotron">
+          {% if def_del %}
+          <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              Ta kategoria jest kategorią domyślną! Nie można jej usunąć!
+          </div>
+          {% endif %}
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3>Kategorie</h3> {% include 'add_category_button.html' %}
@@ -26,7 +32,7 @@
                   <thead>
                       <tr>
                         <th width="5%">id</th>
-                        <th width="10%">Kolor</th>
+                        <th colspan="2" width="10%">Kolor</th>
                         <th>Nazwa</th>
                         <th width="10%">Akcja</th>
                       </tr>
@@ -35,7 +41,8 @@
                   {% for category in categories %}
                       <tr>
                           <td>{{ category.id }}</td>
-                          <td bgcolor="{{category.color}}">{{ category.color }}</td>
+                          <td width="5px" bgcolor="{{category.color}}"></td>
+                          <td>{{ category.color }}</td>
                           <td>{{ category.name }}</td>
                           <td>
                             <!-- EDITION OF COMPANIES -->

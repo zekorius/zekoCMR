@@ -34,6 +34,17 @@
             <label for="id_name">Miasto:</label>
                 <input id="id_city" class="form-control" type="CharField" name="city" max_length="30" required />
             </div>
+            <div class="form-group">
+              <label>Wybierz kategorię:</label>
+              <a target="_blank" href="{% url 'categories_page' %}">Zarządzaj kategoriami</a>
+              <select name="company_category" class="select2_single form-control" tabindex="-1">
+                <option></option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
 
           </div>
           <div class="modal-footer">

@@ -30,10 +30,29 @@
               {% include 'delcompany.html' %}
               </div>
               <div class="panel-body">
-                  Telefon: {{ company.phone }}<br>
-                  Nip: {{ company.nip }}<br>
-                  Adres: {{ company.st_address }}<br>
-                  Miasto: {{ company.city }}<br>
+                <table>
+                  <tr>
+                    <td>Kategoria:</td>
+                    <td> {{ company.category }}</td>
+                    <td width="10px" bgcolor="{{ company.category.color }}"></td>
+                  </tr>
+                  <tr>
+                    <td>Telefon:</td>
+                    <td>{{ company.phone }}</td>
+                  </tr>
+                  <tr>
+                    <td>Nip:</td>
+                    <td>{{ company.nip }}</td>
+                  </tr>
+                  <tr>
+                    <td>Adres:</td>
+                    <td>{{ company.st_address }}</td>
+                  </tr>
+                  <tr>
+                    <td>Miasto:</td>
+                    <td>{{ company.city }}</td>
+                  </tr>
+                </table>
               </div>
               <div class="panel-footer">
                 Pliki:<br>
