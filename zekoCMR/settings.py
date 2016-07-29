@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'widget_tweaks',
     'colorful',
+    'usersmssg'
 ]
 
 MIDDLEWARE_CLASSES = [

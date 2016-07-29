@@ -1,4 +1,3 @@
-from django.contrib.auth.forms import AuthenticationForm
 from django import forms
 from colorful.fields import RGBColorField
 from .models import Categories

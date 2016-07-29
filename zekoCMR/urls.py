@@ -23,7 +23,8 @@ from django.conf import settings
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('log.urls')),
-    url(r'', include('categories.urls')), 
+    url(r'', include('categories.urls')),
+    url(r'', include('usersmssg.urls')),
     url(r'^login/$', views.login, {'template_name': 'login.html', 'authentication_form': LoginForm}),
     url(r'^logout/$', views.logout, {'next_page': '/login'}),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
