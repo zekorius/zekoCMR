@@ -1,0 +1,43 @@
+<div class="inbox-body">
+  <div class="mail_heading row">
+    <div class="col-md-8">
+      <div class="btn-group">
+        <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage{{ current_mssg.id }}Modal">
+          <i class="fa fa-envelope"></i> Odpisz
+        </button>
+        <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Usuń" data-target="#deleteMessage{{ current_mssg.id }}Modal">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4 text-right">
+      <p class="date">{{ current_mssg.delivery_date }}</p>
+    </div>
+    <div class="col-md-12">
+      <h4> {{ current_mssg.title|safe }}</h4>
+    </div>
+  </div>
+  <div class="sender-info">
+    <div class="row">
+      <div class="col-md-12">
+        <strong>{{ current_mssg.mssg_from.username }}</strong>
+        do
+        <strong>{{ current_mssg.mssg_to.username }}</strong>
+      </div>
+    </div>
+  </div>
+  <div class="view-mail">
+    {{ current_mssg.text|linebreaks|safe }}
+  </div>
+  <div class="btn-group">
+        <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage{{ current_mssg.id }}Modal">
+          <i class="fa fa-envelope"></i> Odpisz
+        </button>
+        {% include 'mssg/mssg_reply_modal.html' with mssg=current_mssg %}
+
+        <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-target="#deleteMessage{{ current_mssg.id }}Modal">
+          <i class="fa fa-trash-o"></i>
+        </button>
+        {% include 'mssg/mssg_del_modal.html' with mssg=current_mssg %}
+  </div>
+</div>

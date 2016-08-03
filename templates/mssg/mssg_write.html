@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block page-title %}
 <h3>zekoCMR</h3>
@@ -12,10 +13,38 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="jumbotron">
-
+  <div class="row">
+    <div class="col-md-9 col-sm-9 col-xs-12">
+    <form id="send_mssg" action="." method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Wiadomosc do:</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          <select class="select2_single form-control" name="mssg_to" tabindex="-1">
+            <option></option>
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
         </div>
-    </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tytul:</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          {% render_field mssgform.title class="form-control" %}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12">Tesc:</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
+          {% render_field mssgform.text class="form-control" %}
+        </div>
+      </div>
+
+      <button type="submit" id="compose" name="send-mssg" value="send" class="btn btn-sm btn-success btn-block" type="button">Wyślij Wiadomość</button>
+
+  </form>
+
+  </div>
 </div>
 {% endblock %}

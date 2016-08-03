@@ -1,15 +1,53 @@
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Message
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import MessageForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
-
+from django.db.models import Q
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from .forms import MessageForm
+from .models import Message
+import json
 # Create your views here.
 @login_required(login_url='login/')
 def mssg_all_page(request):
     user_to = User.objects.get(id = request.user.id)
-    inbox = Message.objects.filter(reciver_deleted = False, mssg_to = user_to ).order_by('-delivery_date')
+    inbox = Message.objects.filter(Q(reciver_deleted = False, mssg_to = user_to) | Q(deliver_deleted = False, mssg_from = user_to) ).order_by('-delivery_date')
+    if request.method == "POST" and 'del-mssg' in request.POST:
+        idtodel = request.POST.get('idtodel')
+        mssgtodel = Message.objects.get(id = idtodel)
+        if request.user == mssgtodel.mssg_from:
+            mssgtodel.deliver_deleted = True
+        if request.user == mssgtodel.mssg_to:
+            mssgtodel.reciver_deleted = True
+        if mssgtodel.deliver_deleted and mssgtodel.reciver_deleted:
+            mssgtodel.delete()
+        else:
+            mssgtodel.save()
+    elif request.method == "POST" and 'send-mssg' in request.POST:
+        mssgform = MessageForm(request.POST)
+        if mssgform.is_valid():
+            newmssg = mssgform.save(commit = False)
+            newmssg.mssg_to = User.objects.get(id = request.POST.get('mssg_to'))
+            newmssg.mssg_from = User.objects.get(id = request.user.id)
+            newmssg.save()
+    #jquery & ajax
+    elif request.method == "POST" and request.POST.get('option') == 'get_current':
+        try:
+            current_id = int(request.POST.get('c_id'))
+            if Message.objects.get(id=current_id) in inbox:
+                current_mssg = Message.objects.get(id=current_id)
+            else:
+                current_mssg = inbox.latest('delivery_date')
+            print(current_mssg)
+        except(ObjectDoesNotExist, ValueError):
+            try:
+                print('mom I here')
+                current_mssg = inbox.latest('delivery_date')
+            except(ObjectDoesNotExist):
+                current_mssg = False
+        return render(request,'mssg/current_mssg.html', {'current_mssg':current_mssg,})
+
     try:
         current_id = request.GET.get('current')
         if Message.objects.get(id=current_id) in inbox:
@@ -21,7 +59,23 @@ def mssg_all_page(request):
             current_mssg = inbox.latest('delivery_date')
         except(ObjectDoesNotExist):
             current_mssg = False
-    return render(request,'mssg/mssg_page.html', {'inbox':inbox, 'current_mssg':current_mssg,})
+
+    #pagination
+    if request.GET.get('page'):
+        page = request.GET.get('page')
+    else:
+        page = 1
+    paginator = Paginator(inbox, 5) # pokaż 5 na stronę
+    try:
+        inbox = paginator.page(page)
+    except PageNotAnInteger:
+        inbox = paginator.page(1) # jeżeli strona nie jest liczbą pokaż pierwszą
+    except EmptyPage:
+        inbox = paginator.page(paginator.num_pages) # jeżeli strona poza zasięgiem pokaż ostatnią
+
+    mssgform = MessageForm()
+    users = User.objects.all().order_by('username')
+    return render(request,'mssg/mssg_page.html', {'inbox':inbox, 'current_mssg':current_mssg, 'users':users, 'mssgform':mssgform,})
 
 @login_required(login_url='login/')
 def mssg_to_page(request, user):
@@ -36,4 +90,13 @@ def mssg_from_page(request, user):
 
 @login_required(login_url='login/')
 def mssg_write(request):
-    return render(request,'mssg/mssg_write.html')
+    users = User.objects.all().order_by('username')
+    if request.method == "POST" and 'send-mssg' in request.POST:
+        mssgform = MessageForm(request.POST)
+        if mssgform.is_valid():
+            newmssg = mssgform.save(commit = False)
+            newmssg.mssg_to = User.objects.get(id = request.POST.get('mssg_to'))
+            newmssg.mssg_from = User.objects.get(id = request.user.id)
+            newmssg.save()
+    mssgform = MessageForm()
+    return render(request,'mssg/mssg_write.html',{'users':users, 'mssgform':mssgform})
