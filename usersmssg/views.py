@@ -81,6 +81,7 @@ def mssg_all_page(request):
     if current_mssg and current_mssg.mssg_to == request.user:
         current_mssg.been_read = True
         current_mssg.save()
+        inbox = Message.objects.filter(Q(reciver_deleted = False, mssg_to = user_to) | Q(deliver_deleted = False, mssg_from = user_to) ).order_by('-delivery_date')
 
     #pagination
     if request.GET.get('page'):

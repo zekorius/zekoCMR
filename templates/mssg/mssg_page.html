@@ -16,34 +16,10 @@
           <div class="col-sm-3 mail_list_column">
             <button id="compose" class="btn btn-sm btn-success btn-block" type="button" data-toggle="modal" data-target="#writeMessageModal">Wyślij Wiadomość</button>
             {% include 'mssg/send_mssg_modal.html' %}
-            {% for mssg in inbox %}
-              <div class="mail_list">
-                <div class="left">
-                  <a data-toggle="modal" href="#" type="button" data-target="#replyMessage{{ mssg.id }}Modal">
-                    <i id="mssg_been_read" class="fa fa-envelope{% if not mssg.mssg_to == user or mssg.been_read %}-o{% endif %}"></i>
-                  </a>
-                  {% include 'mssg/mssg_reply_modal.html' %}
-                  <a data-toggle="modal" data-toggle="tooltip" data-placement="right" title="Usuń" href="#" data-target="#deleteMessage{{ mssg.id }}Modal">
-                    <i class="fa fa-trash-o"></i>
-                  </a>
-                  {% include 'mssg/mssg_del_modal.html' %}
-                  <a href="javascript:switchCurrentMssg({{mssg.id}})">js</a>
-                </div>
-                <!-- <a href="?current={{mssg.id}}{% if inbox %}&page={{ inbox.number }}{% endif %}" onclick="javascript:allertCurrentMssg({{mssg.id}})">-->
-                <a id="message_from_inbox" onclick="javascript:onClickswitchCurrentMssg(event, {{mssg.id}})" href="?current={{mssg.id}}{% if inbox %}&page={{ inbox.number }}{% endif %}"><!-- here -->
-                  <div class="right">
-                    <h3>od: <i><b>{{ mssg.mssg_from.username }}</b></i>
-                        do: <i><b>{{ mssg.mssg_to.username }}</b></i>
-                      <small>{{ mssg.delivery_date }}</small></h3>
-                    <h2>{{ mssg.title|safe|truncatechars:55 }}</h2>
-                    <p>{{ mssg.text|safe|truncatewords:15 }}</p>
-                  </div>
-                </a>
-              </div>
-            {% endfor %}
-            <div class="mail_list">
-              {% include 'mssg/pagination_inbox.html' with pages=inbox %}
+            <div id="inbox_body">
+            {% include 'mssg/inbox.html' %}
             </div>
+
           </div>
           <!-- /MAIL LIST -->
 

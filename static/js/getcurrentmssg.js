@@ -46,6 +46,7 @@ $.ajax({
     '+ json.text +'\
     </div>'
     );
+    $("#mssg" + current_id.toString() + "_been_read").replaceWith('<i id="mssg' + current_id.toString() + '_been_read" class="fa fa-envelope-o"></i>');
     // $("#mssg_been_read").replaceWith('<i id="mssg_been_read" class="fa fa-envelope-o"></i>');
 
      console.log("success"); // another sanity check

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 def inbox_processor(request):
     try:
         user = request.user
-        inbox = Message.objects.filter(mssg_to = user).order_by('-delivery_date')[0:5]
+        inbox = Message.objects.filter(mssg_to = user).filter(reciver_deleted = False).order_by('-delivery_date')[0:5]
         unread = Message.objects.filter(mssg_to = user).filter(been_read = False).count()
         if not user:
             raise InputError()
