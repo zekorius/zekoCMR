@@ -4,7 +4,7 @@
   <div class="menu_section">
     <h3>Ogólne</h3>
     <ul class="nav side-menu">
-        <li><a href="/home"><i class="fa fa-home"></i> Strona główna</a></li>
+        <li><a href="/home"><span class="glyphicon glyphicon-home"></span> Strona główna</a></li>
         {% if user.is_authenticated %}
         <li><a><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Firmy</a>
           <ul class="nav child_menu">
@@ -13,6 +13,7 @@
           </ul>
         </li>
         <li><a href="/users"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Użytkownicy</a></li>
+        <li><a href="/mssg/"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Wiadomości</a></li>
         {% endif %}
         {% if user.username == 'zeko' %}
         <li><a href="/test">Strona testowa</a></li>

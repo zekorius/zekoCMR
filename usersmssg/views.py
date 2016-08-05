@@ -1,13 +1,19 @@
+import json
+from datetime import datetime
+from django.utils.dateformat import DateFormat
+from django.utils.formats import get_format
+from django.utils.html import linebreaks
+from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from .forms import MessageForm
 from .models import Message
-import json
 # Create your views here.
 @login_required(login_url='login/')
 def mssg_all_page(request):
@@ -42,11 +48,24 @@ def mssg_all_page(request):
             print(current_mssg)
         except(ObjectDoesNotExist, ValueError):
             try:
-                print('mom I here')
                 current_mssg = inbox.latest('delivery_date')
             except(ObjectDoesNotExist):
                 current_mssg = False
-        return render(request,'mssg/current_mssg.html', {'current_mssg':current_mssg,})
+        response_data = {}
+        if current_mssg:
+            response_data['id']=current_mssg.id
+            response_data['title']=current_mssg.title
+            response_data['text']=mark_safe(linebreaks(current_mssg.text))
+            response_data['mssg_to']=current_mssg.mssg_to.username
+            response_data['mssg_from']=current_mssg.mssg_from.username
+            df = DateFormat(current_mssg.delivery_date)
+            response_data['delivery_date']=df.format(get_format('DATE_FORMAT'))
+            if current_mssg.mssg_to == request.user:
+                current_mssg.been_read = True
+                current_mssg.save()
+            return JsonResponse(response_data )
+        else:
+            return JsonResponse({'no current message':'current message not found'})
 
     try:
         current_id = request.GET.get('current')
@@ -59,6 +78,9 @@ def mssg_all_page(request):
             current_mssg = inbox.latest('delivery_date')
         except(ObjectDoesNotExist):
             current_mssg = False
+    if current_mssg and current_mssg.mssg_to == request.user:
+        current_mssg.been_read = True
+        current_mssg.save()
 
     #pagination
     if request.GET.get('page'):

@@ -1,0 +1,35 @@
+{% load staticfiles %}
+{% load static %}
+<li role="presentation" class="dropdown">
+  <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-envelope-o"></i>
+    {% if unread != 0 %}
+      <span class="badge bg-green">{{ unread }}</span>
+    {% endif %}
+  </a>
+  <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
+    {% for mssg in inbox_top%}
+    <li>
+      <a href="/mssg/?current={{ mssg.id }}">
+        <span class="image"><img src={% static "images/img.jpg" %} alt="Profile Image" /></span>
+        <span>
+          <span>{{ mssg.mssg_from.username }}</span>
+          <span class="time">{{ mssg.delivery_date }}</span>
+        </span>
+        <span class="message">
+          <p>{{ mssg.title|truncatechars:55 }}<p>
+            {{mssg.text|truncatewords:15 }}
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+    <li>
+      <div class="text-center">
+        <a href="/mssg/">
+          <strong>Przejdz do skrzynki</strong>
+          <i class="fa fa-angle-right"></i>
+        </a>
+      </div>
+    </li>
+  </ul>
+</li>
