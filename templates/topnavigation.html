@@ -9,8 +9,8 @@
               </div>
 
               <ul class="nav navbar-nav navbar-right">
-				{% if user.is_authenticated %}
-                <li class="">
+				      {% if user.is_authenticated %}
+                <li class="dropdown">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                     <img src={% static "images/img.jpg" %} alt="">{{ user.get_username }}
                     <span class=" fa fa-angle-down"></span>
@@ -22,17 +22,13 @@
                         <span class="badge bg-red pull-right">50%</span>
                         <span>Settings</span>
                       </a>
-                    </li>
-                    <li><a href="javascript:;">Help</a></li>-->
-                    <li><a href="/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                    </li>-->
+                    <!-- <li><a href="/mssg/"><i class="fa fa-envelope-o">Wiadomości</a></li> -->
+                    <li><a href="/logout"><i class="fa fa-sign-out pull-right"></i> Wyloguj</a></li>
                   </ul>
                 </li>
 
-              <div id="inbox_base">
-
               {% include 'mssg/inbox_base.html' %}
-
-              </div>
 
 
               {% endif %}
