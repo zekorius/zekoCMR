@@ -60,7 +60,7 @@ ROOT_URLCONF = 'zekoCMR.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],  #modify this line
+        'DIRS': ['templates'],  #modify this line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

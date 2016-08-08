@@ -16,8 +16,8 @@ $.ajax({
 
  success : function(json) {
      console.log(json); // log the returned json to the console
-     console.log("delivery_date:")
-     console.log(json.delivery_date)
+     console.log("delivery_date:");
+     console.log(json.delivery_date);
      $("#current_mssg_date").replaceWith('<p id="current_mssg_date" class="date">'+ json.delivery_date + '</p>');
      $("#current_mssg_title").replaceWith('<h4 id="current_mssg_title">'+ json.title +'</h4>');
      $("#current_mssg_buttons").replaceWith(

@@ -9,9 +9,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.db.models import Q
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, render
+from django.template import Context, Template
+from django.template.loader import render_to_string
 from .forms import MessageForm
 from .models import Message
 # Create your views here.
@@ -82,7 +83,6 @@ def mssg_all_page(request):
         current_mssg.been_read = True
         current_mssg.save()
         inbox = Message.objects.filter(Q(reciver_deleted = False, mssg_to = user_to) | Q(deliver_deleted = False, mssg_from = user_to) ).order_by('-delivery_date')
-
     #pagination
     if request.GET.get('page'):
         page = request.GET.get('page')
@@ -99,6 +99,29 @@ def mssg_all_page(request):
     mssgform = MessageForm()
     users = User.objects.all().order_by('username')
     return render(request,'mssg/mssg_page.html', {'inbox':inbox, 'current_mssg':current_mssg, 'users':users, 'mssgform':mssgform,})
+
+@login_required(login_url='login/')
+def mssg_get_inbox(request):
+    if not request.is_ajax():
+        raise Http404("Ta strona nie istnieje")
+    try:
+        page = request.POST.get('page')
+        # print('\nIM ON PAGE{}\n'.format(str(page)))
+        user_to = request.user
+        inbox = Message.objects.filter(Q(reciver_deleted = False, mssg_to = user_to) | Q(deliver_deleted = False, mssg_from = user_to) ).order_by('-delivery_date')
+        paginator = Paginator(inbox, 5) # pokaż 5 na stronę
+        try:
+            inbox = paginator.page(page)
+        except PageNotAnInteger:
+            inbox = paginator.page(1) # jeżeli strona nie jest liczbą pokaż pierwszą
+        except EmptyPage:
+            inbox = paginator.page(paginator.num_pages) # jeżeli strona poza zasięgiem pokaż ostatnią
+        inbox_template = render_to_string('mssg/inbox.html', {'inbox': inbox})
+        payload = {'inbox_html': inbox_template,}
+    except:
+        inbox_template = render_to_string('mssg/inbox.html', {'inbox': False})
+        payload = {'inbox_html', inbox_template }
+    return JsonResponse(payload)
 
 @login_required(login_url='login/')
 def mssg_to_page(request, user):
