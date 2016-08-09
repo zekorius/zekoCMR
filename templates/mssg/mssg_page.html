@@ -14,7 +14,10 @@
 <div class="container">
     <div class="row">
           <div class="col-sm-3 mail_list_column">
-            <button id="compose" class="btn btn-sm btn-success btn-block" type="button" data-toggle="modal" data-target="#writeMessageModal">Wyślij Wiadomość</button>
+            <button class="btn btn btn-success btn-block" type="button" data-toggle="modal" data-target="#writeMessageModal">Wyślij Wiadomość</button>
+
+            {% include 'mssg/search_engine.html' %}
+
             {% include 'mssg/send_mssg_modal.html' %}
             <div id="inbox_body">
             {% include 'mssg/inbox.html' %}

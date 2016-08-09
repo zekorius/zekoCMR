@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 
 <!-- Modal MESSAGES -->
-<div class="modal fade" id="writeMessageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="writeMessageModal" tabindex="-1" role="dialog" aria-labelledby="writeMessageModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,7 +12,7 @@
           <div class="modal-body">
             {% csrf_token %}
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Wiadomosc do:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Wiadomość do:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 <select name="mssg_to" class="select2_single form-control" required tabindex="-1">
                   <option></option>
@@ -23,13 +23,13 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Tytul:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Tytuł:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 {% render_field mssgform.title class="form-control" %}
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Tesc:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Teść:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
                 {% render_field mssgform.text class="form-control" %}
               </div>

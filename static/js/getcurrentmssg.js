@@ -22,20 +22,20 @@ $.ajax({
      $("#current_mssg_title").replaceWith('<h4 id="current_mssg_title">'+ json.title +'</h4>');
      $("#current_mssg_buttons").replaceWith(
        '<div id="current_mssg_buttons" class="btn-group"> \
-         <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage'+ json.id + 'Modal"> \
+         <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage'+ json.id.toString() + 'Modal"> \
            <i class="fa fa-envelope"></i> Odpisz \
          </button> \
-         <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Usuń" data-target="#deleteMessage'+ json.id +'Modal"> \
+         <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Usuń" data-target="#deleteMessage'+ json.id.toString() +'Modal"> \
            <i class="fa fa-trash-o"></i> \
          </button> \
        </div>'
     );
-    $("#current_mssg_buttons2").replaceWith(
+    $("#delete_current_button").replaceWith(
       '<div id="current_mssg_buttons2" class="btn-group"> \
-        <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage'+ json.id + 'Modal"> \
+        <button class="btn btn-sm btn-primary" data-toggle="modal" type="button" data-target="#replyMessage'+ json.id.toString() + 'Modal"> \
           <i class="fa fa-envelope"></i> Odpisz \
         </button> \
-        <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Usuń" data-target="#deleteMessage'+ json.id +'Modal"> \
+        <button class="btn btn-sm btn-default" data-toggle="modal" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Usuń" data-target="#deleteMessage'+ json.id.toString() +'Modal"> \
           <i class="fa fa-trash-o"></i> \
         </button> \
       </div>'

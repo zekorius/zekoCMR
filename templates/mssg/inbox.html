@@ -5,9 +5,9 @@
         <i id="mssg{{ mssg.id }}_been_read" class="fa fa-envelope{% if mssg.mssg_from == user or mssg.been_read %}-o{% endif %}"></i>
       </a>
       <a data-toggle="modal" data-toggle="tooltip" data-placement="right" title="Usuń" href="#" data-target="#deleteMessage{{ mssg.id }}Modal">
-        {% include 'mssg/mssg_reply_modal.html' %}
         <i class="fa fa-trash-o"></i>
       </a>
+      {% include 'mssg/mssg_reply_modal.html' %}
       {% include 'mssg/mssg_del_modal.html' %}
     </div>
     <!-- <a href="?current={{mssg.id}}{% if inbox %}&page={{ inbox.number }}{% endif %}" onclick="javascript:allertCurrentMssg({{mssg.id}})">-->

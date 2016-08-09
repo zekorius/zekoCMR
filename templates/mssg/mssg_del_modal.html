@@ -7,10 +7,9 @@
         <h4 class="modal-title" id="myModalLabel">Potwierdzenie usunięcia</h4>
       </div>
       <form method="POST" class="post-form">{% csrf_token %}
-          <input type="hidden" id="id_idtodel" type="IntegerField" name="idtodel" value={{ mssg.id }} />
+          <input type="hidden" id="id_idtodel" type="IntegerField" name="idtodel" value="{{ mssg.id }}" />
           <div class="modal-body">
             Czy napewno chcesz usunąć wiadomosc {{ mssg }}&#63;
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>

@@ -42,7 +42,7 @@ class Comments(models.Model):
     company = models.ForeignKey(Companies, related_name='comment_parent', default=1)
     author = models.ForeignKey(User, related_name='comment_author', default=1)
     title = models.CharField(max_length=80, default = 'Brak tytułu ')
-    text = models.TextField(default = 'pusty komentarz')
+    text = models.TextField()
     created = models.DateTimeField(auto_now=True, auto_now_add=False)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
